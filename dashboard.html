@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Servo Saver — Case Study Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #f4f6f9;
+    --panel: #ffffff;
+    --border: #e3e8ef;
+    --text: #1a2433;
+    --muted: #6b7787;
+    --primary: #1f5eff;
+    --primary-2: #133fb0;
+    --accent: #ff7a45;
+    --good: #1aa35c;
+    --warn: #e8a83c;
+    --bad: #e25555;
+    --sidebar-w: 230px;
+    --radius: 12px;
+    --shadow: 0 1px 2px rgba(16,24,40,0.04), 0 1px 3px rgba(16,24,40,0.06);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---------- layout ---------- */
+  .shell { display: flex; min-height: 100vh; }
+
+  .sidebar {
+    width: var(--sidebar-w);
+    flex-shrink: 0;
+    background: #101828;
+    color: #cbd5e1;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 1.2rem 0.9rem;
+  }
+  .sidebar .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.4rem 0.5rem 1.2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 1rem;
+  }
+  .sidebar .brand .logo {
+    width: 30px; height: 30px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--primary), #00c2a8);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 0.85rem; color: #fff;
+  }
+  .sidebar .brand .name { font-weight: 700; font-size: 0.92rem; color: #fff; line-height: 1.1; }
+  .sidebar .brand .sub { font-size: 0.68rem; color: #8896a8; }
+
+  .sidebar nav a {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: #aab4c4;
+    text-decoration: none;
+    font-size: 0.83rem;
+    padding: 0.55rem 0.7rem;
+    border-radius: 8px;
+    margin-bottom: 0.15rem;
+  }
+  .sidebar nav a .ico { width: 18px; text-align: center; opacity: 0.85; }
+  .sidebar nav a:hover { background: rgba(255,255,255,0.06); color: #fff; }
+  .sidebar nav a.active { background: rgba(31,94,255,0.18); color: #fff; }
+
+  .sidebar .footer-note {
+    margin-top: auto;
+    font-size: 0.68rem;
+    color: #6b7888;
+    padding: 0.6rem;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .main { flex: 1; min-width: 0; }
+
+  .topbar {
+    background: var(--panel);
+    border-bottom: 1px solid var(--border);
+    padding: 1.1rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+  .topbar h1 { font-size: 1.15rem; margin: 0; }
+  .topbar .scope-pill {
+    font-size: 0.72rem;
+    color: var(--primary);
+    background: rgba(31,94,255,0.08);
+    border: 1px solid rgba(31,94,255,0.25);
+    border-radius: 999px;
+    padding: 0.25rem 0.75rem;
+  }
+
+  .content { padding: 1.8rem 2rem 4rem; max-width: 1280px; }
+
+  section { margin-bottom: 2.6rem; scroll-margin-top: 5rem; }
+  .section-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 0.9rem; flex-wrap: wrap; gap: 0.4rem;}
+  .section-head h2 { font-size: 1.05rem; margin: 0; }
+  .section-head .desc { font-size: 0.8rem; color: var(--muted); max-width: 560px; }
+
+  /* ---------- KPI cards ---------- */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 0.9rem;
+  }
+  .kpi-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 1rem 1.1rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi-card .top-row { display: flex; justify-content: space-between; align-items: flex-start; }
+  .kpi-card .ico {
+    width: 34px; height: 34px;
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+  }
+  .kpi-card .value { font-size: 1.55rem; font-weight: 800; margin-top: 0.6rem; letter-spacing: -0.01em; }
+  .kpi-card .label { font-size: 0.78rem; color: var(--muted); margin-top: 0.15rem; }
+  .kpi-card .src { font-size: 0.66rem; color: #9aa5b3; margin-top: 0.5rem; }
+  .kpi-card.blue .ico { background: rgba(31,94,255,0.12); color: var(--primary); }
+  .kpi-card.green .ico { background: rgba(26,163,92,0.12); color: var(--good); }
+  .kpi-card.orange .ico { background: rgba(255,122,69,0.12); color: var(--accent); }
+  .kpi-card.amber .ico { background: rgba(232,168,60,0.15); color: #b07a16; }
+
+  /* ---------- panel / widget ---------- */
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 1.2rem 1.3rem;
+  }
+  .grid-2 { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 1rem; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  @media (max-width: 900px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+  .panel h3 { margin: 0 0 0.8rem; font-size: 0.9rem; }
+  .chart-wrap { position: relative; height: 240px; }
+  .chart-wrap.short { height: 180px; }
+
+  /* ---------- process stepper ---------- */
+  .stepper { display: flex; flex-wrap: wrap; gap: 0; align-items: stretch; }
+  .step {
+    background: #f8faff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.7rem 0.9rem;
+    font-size: 0.78rem;
+    flex: 1 1 150px;
+    min-width: 150px;
+    position: relative;
+  }
+  .step .tag { display:block; font-size: 0.66rem; color: var(--primary); font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.3rem; }
+  .step.decision { background: #fff8ef; border-color: #f2dfb8; }
+  .step.decision .tag { color: #b07a16; }
+  .step.parallel { background: #f1fbf6; border-color: #c9ecd9; }
+  .step.parallel .tag { color: var(--good); }
+  .arrow-sep { display: flex; align-items: center; justify-content: center; color: #b7c0cc; padding: 0 0.35rem; font-size: 1rem; }
+
+  /* ---------- exceptions ---------- */
+  .ex-list { list-style: none; margin: 0; padding: 0; }
+  .ex-list li {
+    display: flex; gap: 0.6rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px dashed var(--border);
+    font-size: 0.82rem;
+  }
+  .ex-list li:last-child { border-bottom: none; }
+  .ex-list .code { color: var(--bad); font-weight: 700; font-size: 0.74rem; min-width: 34px; }
+
+  /* ---------- table ---------- */
+  table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+  thead th {
+    text-align: left;
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding: 0.5rem 0.6rem;
+    border-bottom: 2px solid var(--border);
+  }
+  tbody td { padding: 0.55rem 0.6rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tbody tr:last-child td { border-bottom: none; }
+
+  .badge { display: inline-block; font-size: 0.68rem; border-radius: 999px; padding: 0.1rem 0.55rem; border: 1px solid var(--border); color: var(--muted); }
+  .badge.include { color: var(--primary); border-color: rgba(31,94,255,0.4); background: rgba(31,94,255,0.06); }
+  .badge.extend { color: #b07a16; border-color: rgba(232,168,60,0.5); background: rgba(232,168,60,0.08); }
+  .badge.new { color: var(--accent); border-color: rgba(255,122,69,0.5); background: rgba(255,122,69,0.08); }
+
+  /* ---------- class cards ---------- */
+  .class-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+  .class-box { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: var(--panel); box-shadow: var(--shadow); }
+  .class-box .head { background: #f8faff; padding: 0.6rem 0.9rem; font-weight: 700; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+  .class-box.highlight .head { background: rgba(255,122,69,0.08); }
+  .class-box .body { padding: 0.85rem 0.9rem; font-size: 0.79rem; color: var(--muted); }
+  .class-box .body b { color: var(--text); }
+
+  /* ---------- lifecycle ---------- */
+  .lifecycle { display: flex; flex-wrap: wrap; gap: 0.45rem; align-items: center; }
+  .life-state { background: #f8faff; border: 1px solid var(--border); border-radius: 999px; padding: 0.35rem 0.85rem; font-size: 0.78rem; }
+  .life-state.terminal { background: rgba(255,122,69,0.1); border-color: rgba(255,122,69,0.4); color: var(--accent); font-weight: 600; }
+  .life-arrow { color: #b7c0cc; }
+
+  /* ---------- UX scorecard ---------- */
+  .score-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px,1fr)); gap: 1rem; }
+  .score-card { border-radius: var(--radius); padding: 1rem 1.1rem; border: 1px solid var(--border); background: var(--panel); box-shadow: var(--shadow); }
+  .score-card .sh { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem; }
+  .score-card .sh .label { font-weight: 700; font-size: 0.85rem; }
+  .score-card .sh .count { font-size: 1.3rem; font-weight: 800; }
+  .score-card.good .sh .count { color: var(--good); }
+  .score-card.bad .sh .count { color: var(--warn); }
+  .score-card.ugly .sh .count { color: var(--bad); }
+  .score-card ul { margin: 0; padding-left: 1.1rem; font-size: 0.81rem; color: var(--text); }
+  .score-card li { margin-bottom: 0.35rem; }
+
+  /* ---------- documents ---------- */
+  .doc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 0.9rem; }
+  .doc-card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 0.9rem 1rem; text-decoration: none; color: var(--text);
+    display: block; transition: box-shadow 0.15s, transform 0.15s;
+  }
+  .doc-card:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(16,24,40,0.1); }
+  .doc-card .title { font-weight: 700; font-size: 0.86rem; }
+  .doc-card .desc { color: var(--muted); font-size: 0.76rem; margin-top: 0.25rem; }
+
+  footer { text-align: center; padding: 2rem 1.5rem 3rem; color: var(--muted); font-size: 0.78rem; }
+  footer a { color: var(--primary); }
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo">SS</div>
+      <div>
+        <div class="name">Servo Saver</div>
+        <div class="sub">Case Study Dashboard</div>
+      </div>
+    </div>
+    <nav>
+      <a href="#overview" class="active"><span class="ico">&#9737;</span> Overview</a>
+      <a href="#business-case"><span class="ico">&#128202;</span> Business Case</a>
+      <a href="#activity"><span class="ico">&#10148;</span> Activity Diagram</a>
+      <a href="#usecase"><span class="ico">&#128279;</span> Use Cases</a>
+      <a href="#class"><span class="ico">&#128193;</span> Class &amp; CRC</a>
+      <a href="#state"><span class="ico">&#9201;</span> State Machine</a>
+      <a href="#ui"><span class="ico">&#128241;</span> UI Evaluation</a>
+      <a href="#improvement"><span class="ico">&#128161;</span> Improvement</a>
+      <a href="#documents"><span class="ico">&#128196;</span> Documents</a>
+    </nav>
+    <div class="footer-note">ISYS2395 · Business Systems Analysis &amp; Design · RMIT University</div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <h1>Servo Saver — Fuel Price Feature, Service Victoria App</h1>
+      <span class="scope-pill">Scope: Customer (Motorist) perspective</span>
+    </div>
+
+    <div class="content">
+
+      <section id="overview">
+        <div class="section-head">
+          <h2>Overview</h2>
+          <div class="desc">Key figures behind the business case for fuel-price transparency in Victoria.</div>
+        </div>
+        <div class="kpi-grid">
+          <div class="kpi-card blue">
+            <div class="top-row"><div class="ico">&#128176;</div></div>
+            <div class="value">$58.7B</div>
+            <div class="label">AU fuel-retailing revenue, 2024–25</div>
+            <div class="src">IBISWorld (2025)</div>
+          </div>
+          <div class="kpi-card green">
+            <div class="top-row"><div class="ico">&#128200;</div></div>
+            <div class="value">4.4%</div>
+            <div class="label">5-yr annualised industry growth</div>
+            <div class="src">IBISWorld (2025)</div>
+          </div>
+          <div class="kpi-card orange">
+            <div class="top-row"><div class="ico">&#9981;</div></div>
+            <div class="value">≈ $333 / yr</div>
+            <div class="label">Potential saving buying at cycle low</div>
+            <div class="src">ACCC (2024)</div>
+          </div>
+          <div class="kpi-card amber">
+            <div class="top-row"><div class="ico">&#9888;</div></div>
+            <div class="value">$3,000+</div>
+            <div class="label">Penalty per reporting breach</div>
+            <div class="src">Consumer Affairs Victoria (2025)</div>
+          </div>
+          <div class="kpi-card blue">
+            <div class="top-row"><div class="ico">&#127968;</div></div>
+            <div class="value">100+</div>
+            <div class="label">Services on Service Victoria platform</div>
+            <div class="src">Service Victoria (2025)</div>
+          </div>
+          <div class="kpi-card green">
+            <div class="top-row"><div class="ico">&#128197;</div></div>
+            <div class="value">Oct 2025</div>
+            <div class="label">Servo Saver launch date</div>
+            <div class="src">Premier of Victoria (2025)</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="business-case">
+        <div class="section-head">
+          <h2>Business Case</h2>
+          <div class="desc">Daily price-cap mechanism and the value of timing a fuel purchase correctly.</div>
+        </div>
+        <div class="grid-2">
+          <div class="panel">
+            <h3>Daily price-cap cycle</h3>
+            <div class="chart-wrap"><canvas id="capCycleChart"></canvas></div>
+          </div>
+          <div class="panel">
+            <h3>Annual saving: cycle high vs. cycle low</h3>
+            <div class="chart-wrap"><canvas id="savingsChart"></canvas></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="activity">
+        <div class="section-head">
+          <h2>Activity Diagram — Searching for Nearby Fuel</h2>
+          <div class="desc">UC1, the motorist's core journey: location detection, a parallel price/cap fetch, and graceful handling of empty results.</div>
+        </div>
+        <div class="panel">
+          <div class="stepper">
+            <div class="step">Open app → tap "Servo Saver"</div>
+            <div class="arrow-sep">&#8594;</div>
+            <div class="step decision">Decision: GPS permission?<br><small>granted → request coords · denied → manual suburb entry</small></div>
+            <div class="arrow-sep">&#8594;</div>
+            <div class="step parallel">Fork: query prices ‖ retrieve daily caps <small>(parallel, joins before continuing)</small></div>
+            <div class="arrow-sep">&#8594;</div>
+            <div class="step decision">Decision: stations found?<br><small>yes → render map · no → empty state / widen search</small></div>
+            <div class="arrow-sep">&#8594;</div>
+            <div class="step">View prices → select station → details shown</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="usecase">
+        <div class="section-head">
+          <h2>Use Cases</h2>
+          <div class="desc">Overall service map and the expanded flow/exceptions for UC1.</div>
+        </div>
+        <div class="grid-2">
+          <div class="panel">
+            <h3>Use case relationships</h3>
+            <table>
+              <thead><tr><th>Relationship</th><th>Meaning</th><th>Examples</th></tr></thead>
+              <tbody>
+                <tr><td><span class="badge include">«include»</span></td><td>Mandatory sub-step</td><td>Detect location, Retrieve prices, Display results</td></tr>
+                <tr><td><span class="badge extend">«extend»</span></td><td>Optional enhancement</td><td>Manual entry, Filter, Sort, View price cap</td></tr>
+                <tr><td><span class="badge">generalisation</span></td><td>Specialised actor</td><td>Registered SV Account Holder ← User (Motorist)</td></tr>
+              </tbody>
+            </table>
+            <h3 style="margin-top:1.2rem;">Exception conditions — UC1</h3>
+            <ul class="ex-list">
+              <li><span class="code">1.2</span> GPS not granted → manual-entry prompt, geocode, resume at 2.3.</li>
+              <li><span class="code">2.1</span> Location Services failure → fall back to manual entry.</li>
+              <li><span class="code">2.3</span> Price database unreachable → service-unavailable message + retry.</li>
+              <li><span class="code">2.4</span> No stations found → empty state, widen search.</li>
+              <li><span class="code">4.1</span> Station details fail to load → cached details + warning.</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h3>Service mix — legacy vs. improvement</h3>
+            <div class="chart-wrap"><canvas id="useCaseChart"></canvas></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="class">
+        <div class="section-head">
+          <h2>Class Diagram &amp; CRC Cards</h2>
+          <div class="desc">FuelStation and FuelPrice anchor the legacy structure; PriceAlert and AlertNotification extend it without altering any existing class.</div>
+        </div>
+        <div class="class-grid">
+          <div class="class-box">
+            <div class="head">FuelStation <span class="badge">core</span></div>
+            <div class="body">
+              <b>Attributes:</b> stationId, name, brand, openingHours, address, isOperating<br><br>
+              <b>Composes:</b> FuelPrice (1→0..*), DailyPriceCap (1→0..*)<br>
+              <b>Aggregated by:</b> FuelRetailer<br><br>
+              <b>Rule:</b> at most one active FuelPrice per FuelType.
+            </div>
+          </div>
+          <div class="class-box">
+            <div class="head">FuelPrice <span class="badge">core</span></div>
+            <div class="body">
+              <b>Attributes:</b> priceId, amount, submittedAt, status<br><br>
+              <b>Validates against:</b> DailyPriceCap<br>
+              <b>Part of:</b> FuelStation (composition)<br><br>
+              <b>Rule:</b> amount must not exceed the locked cap.
+            </div>
+          </div>
+          <div class="class-box highlight">
+            <div class="head">PriceAlert <span class="badge new">new</span></div>
+            <div class="body">
+              <b>Attributes:</b> alertId, fuelCode, thresholdPrice, radiusKm, quietHours, status<br><br>
+              <b>Belongs to:</b> RegisteredAccountHolder<br>
+              <b>Matched against:</b> FuelPrice<br><br>
+              <b>Rule:</b> fires only when Active price ≤ threshold, outside quiet hours.
+            </div>
+          </div>
+          <div class="class-box highlight">
+            <div class="head">AlertNotification <span class="badge new">new</span></div>
+            <div class="body">
+              <b>Attributes:</b> notificationId, channel, sentAt, deliveryStatus<br><br>
+              <b>Part of:</b> PriceAlert (composition)<br><br>
+              <b>Rule:</b> failed deliveries retry up to 3 times.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="state">
+        <div class="section-head">
+          <h2>State Machine — the FuelPrice Object</h2>
+          <div class="desc">Full lifecycle of a single FuelPrice, from submission to destruction.</div>
+        </div>
+        <div class="panel">
+          <div class="lifecycle">
+            <span class="life-state">● Start</span><span class="life-arrow">&#8594;</span>
+            <span class="life-state">Submitted</span><span class="life-arrow">&#8594;</span>
+            <span class="life-state">Validating <small>(format ‖ cap)</small></span><span class="life-arrow">&#8594;</span>
+            <span class="life-state">Live <small>(Active ⇄ Stale)</small></span><span class="life-arrow">&#8594;</span>
+            <span class="life-state">Archived</span><span class="life-arrow">&#8594;</span>
+            <span class="life-state terminal">◎ Final (7yr retention)</span>
+          </div>
+          <p style="font-size:0.8rem; color:var(--muted); margin-top:1rem; margin-bottom:0;">A <b style="color:var(--text)">terminate</b> marker purges a price immediately if its station is deregistered. The moment a price becomes <b style="color:var(--accent)">Active</b> is the exact event Price Drop Alerts listens for.</p>
+        </div>
+      </section>
+
+      <section id="ui">
+        <div class="section-head">
+          <h2>User Interface Evaluation</h2>
+          <div class="desc">Hands-on assessment of the live app's map view, list view, fuel-type selector and brand filter.</div>
+        </div>
+        <div class="score-grid">
+          <div class="score-card good">
+            <div class="sh"><span class="label">Good</span><span class="count">4</span></div>
+            <ul>
+              <li>Map-first, colour-coded pins with "Lowest" badge</li>
+              <li>"Tomorrow's price cap" panel</li>
+              <li>Comprehensive filters / sort</li>
+              <li>Inherits SV trust &amp; single sign-in</li>
+            </ul>
+          </div>
+          <div class="score-card bad">
+            <div class="sh"><span class="label">Needs work</span><span class="count">4</span></div>
+            <ul>
+              <li>Entirely pull-based, no proactive alerts</li>
+              <li>No save / watchlist capability</li>
+              <li>App-wide timestamp, not per-station</li>
+              <li>Sort options not combinable</li>
+            </ul>
+          </div>
+          <div class="score-card ugly">
+            <div class="sh"><span class="label">Defects</span><span class="count">2</span></div>
+            <ul>
+              <li>"Opening hours not available" reads as broken</li>
+              <li>Inconsistent brand-filter logos</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="improvement">
+        <div class="section-head">
+          <h2>Proposed Improvement — Price Drop Alerts</h2>
+          <div class="desc">Registered holders set fuel type, target price, radius and quiet hours; the system notifies them when a nearby station drops to target — reusing existing location, cap and account components.</div>
+        </div>
+        <div class="grid-2">
+          <div class="panel">
+            <h3>Value drivers</h3>
+            <div class="chart-wrap"><canvas id="valueChart"></canvas></div>
+          </div>
+          <div class="panel">
+            <h3>Why it works</h3>
+            <table>
+              <thead><tr><th>Driver</th><th>Mechanism</th><th>Evidence</th></tr></thead>
+              <tbody>
+                <tr><td>Engagement</td><td>Push alerts at the moment value is highest</td><td>Airship (2024), ~3× retention</td></tr>
+                <tr><td>Savings</td><td>Surfaces the cycle low as it happens</td><td>ACCC (2024), ≈$333/yr</td></tr>
+                <tr><td>Policy fit</td><td>Steers demand to competitive stations</td><td>Premier of Victoria (2025)</td></tr>
+                <tr><td>Low risk</td><td>Reuses location, price, cap, account</td><td>This report</td></tr>
+              </tbody>
+            </table>
+            <p style="font-size:0.78rem; color:var(--muted); margin-top:0.9rem; margin-bottom:0;"><b style="color:var(--text)">Trade-offs managed:</b> notification fatigue (opt-in, quiet hours, 10-alert cap) · retailer perspective (rewards competitive pricing) · privacy (security review required before build).</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="documents">
+        <div class="section-head">
+          <h2>Source Documents</h2>
+          <div class="desc">Every diagram and the full report behind this dashboard.</div>
+        </div>
+        <div class="doc-grid">
+          <a class="doc-card" href="Servo%20Saver%20Individual%20Project%20Report.pdf"><div class="title">Full Project Report</div><div class="desc">Complete write-up (PDF)</div></a>
+          <a class="doc-card" href="Activity_Diagram.pdf"><div class="title">Activity Diagram</div><div class="desc">UC1 — searching for nearby fuel</div></a>
+          <a class="doc-card" href="Use_case_Diagram.pdf"><div class="title">Use Case Diagram</div><div class="desc">Overall legacy system</div></a>
+          <a class="doc-card" href="Use_case_Improvised.pdf"><div class="title">Improved Use Case Diagram</div><div class="desc">With Price Drop Alerts</div></a>
+          <a class="doc-card" href="Expanded%20Use%20Cases.pdf"><div class="title">Expanded Use Case</div><div class="desc">UC1 detailed description</div></a>
+          <a class="doc-card" href="Expanded%20Use%20Cases%20Improvised.pdf"><div class="title">Expanded New Use Case</div><div class="desc">Set price drop alert</div></a>
+          <a class="doc-card" href="Class%20Diagram.pdf"><div class="title">Class Diagram</div><div class="desc">Legacy structure</div></a>
+          <a class="doc-card" href="Class%20Diagram_improvised.pdf"><div class="title">Improved Class Diagram</div><div class="desc">PriceAlert, AlertNotification</div></a>
+          <a class="doc-card" href="CRC%20Card.pdf"><div class="title">CRC Cards</div><div class="desc">FuelStation, FuelPrice</div></a>
+          <a class="doc-card" href="CRC_Cards_Improvised.pdf"><div class="title">New CRC Cards</div><div class="desc">PriceAlert, AlertNotification</div></a>
+          <a class="doc-card" href="State%20Machine%20Diagram.pdf"><div class="title">State Machine Diagram</div><div class="desc">FuelPrice lifecycle</div></a>
+        </div>
+      </section>
+
+      <footer>
+        Servo Saver Case Study · ISYS2395 Business Systems Analysis &amp; Design, RMIT University · See <a href="README.md">README.md</a> for the full written case study.
+      </footer>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+  Chart.defaults.color = "#6b7787";
+  Chart.defaults.borderColor = "#e3e8ef";
+
+  // Daily price-cap cycle
+  new Chart(document.getElementById('capCycleChart'), {
+    type: 'line',
+    data: {
+      labels: ['12am', '6am', '2pm submit', '4pm publish', '6am (cap locks)', '+24h'],
+      datasets: [{
+        label: 'Cap status',
+        data: [0, 0, 0.4, 0.8, 1, 1],
+        borderColor: '#1f5eff',
+        backgroundColor: 'rgba(31,94,255,0.12)',
+        fill: true,
+        tension: 0.35,
+        pointRadius: 4,
+        pointBackgroundColor: '#1f5eff'
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { y: { display: false }, x: { grid: { display: false } } }
+    }
+  });
+
+  // Savings chart
+  new Chart(document.getElementById('savingsChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Buy at cycle high', 'Buy at cycle low'],
+      datasets: [{
+        label: 'Indicative annual fuel spend impact ($)',
+        data: [333, 0],
+        backgroundColor: ['#e25555', '#1aa35c'],
+        borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true, title: { display: true, text: '$ vs. cycle-low baseline' } } }
+    }
+  });
+
+  // Use case mix
+  new Chart(document.getElementById('useCaseChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Legacy — include', 'Legacy — extend', 'Improvement — new use cases'],
+      datasets: [{
+        data: [3, 4, 5],
+        backgroundColor: ['#1f5eff', '#e8a83c', '#ff7a45'],
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 11 } } } }
+    }
+  });
+
+  // Value drivers (qualitative impact score 1-5)
+  new Chart(document.getElementById('valueChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Engagement & retention', 'Motorist savings', 'Policy alignment', 'Low build cost/risk'],
+      datasets: [{
+        label: 'Relative impact',
+        data: [5, 4, 4, 5],
+        backgroundColor: '#1f5eff',
+        borderRadius: 6
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { x: { beginAtZero: true, max: 5, grid: { color: '#eef1f5' } }, y: { grid: { display: false } } }
+    }
+  });
+
+  // active sidebar link on scroll
+  const links = document.querySelectorAll('.sidebar nav a');
+  const sections = [...links].map(l => document.querySelector(l.getAttribute('href')));
+  window.addEventListener('scroll', () => {
+    let idx = 0;
+    sections.forEach((s, i) => { if (s && window.scrollY >= s.offsetTop - 80) idx = i; });
+    links.forEach(l => l.classList.remove('active'));
+    links[idx].classList.add('active');
+  });
+</script>
+
+</body>
+</html>
