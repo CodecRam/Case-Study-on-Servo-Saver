@@ -191,5 +191,3 @@ Servo Saver is a well-conceived public service that makes a volatile, opaque mar
 | [CRC Card.pdf](CRC%20Card.pdf) | Legacy CRC cards (FuelStation, FuelPrice) |
 | [CRC_Cards_Improvised.pdf](CRC_Cards_Improvised.pdf) | New CRC cards (PriceAlert, AlertNotification) |
 | [State Machine Diagram.pdf](State%20Machine%20Diagram.pdf) | FuelPrice state machine |
-
-**Note on AI use:** Generative AI was used to help structure and improve the writing of the report, and to help produce one imaginary mock-up of the improved interface. The analysis, modelling and report content are otherwise the author's own work.
