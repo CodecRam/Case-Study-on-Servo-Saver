@@ -1,8 +1,8 @@
-# Case Study on Servo Saver
+# Servo Saver — Product Analysis
 
-A Business Analyst's report on the **Servo Saver** fuel-price feature of the Service Victoria app, modelled in UML and assessed for ISYS2395 - Business Systems Analysis and Design (RMIT University).
+A Business Analyst's report on the **Servo Saver** fuel-price feature of the Service Victoria app, modelled in UML. An individual project by Ramkrushna Bhadekar.
 
-> Servo Saver lets Victorian motorists compare government-reported fuel prices at nearby service stations on a map or ranked list, highlights the cheapest options, and shows each retailer's locked maximum price for the following day. This case study deconstructs the system from the motorist's perspective using UML, evaluates its interface, and proposes a single, well-evidenced improvement: **Price Drop Alerts**.
+> Servo Saver lets Victorian motorists compare government-reported fuel prices at nearby service stations on a map or ranked list, highlights the cheapest options, and shows each retailer's locked maximum price for the following day. This report deconstructs the system from the motorist's perspective using UML, evaluates its interface, and proposes a single, well-evidenced improvement: **Price Drop Alerts**.
 
 Full report: [Servo Saver Individual Project Report.pdf](Servo%20Saver%20Individual%20Project%20Report.pdf) ([.docx](Servo%20Saver%20Individual%20Project%20Report.docx))
 
