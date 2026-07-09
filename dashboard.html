@@ -4,39 +4,53 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Servo Saver — Product Analysis Dashboard</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 <style>
   :root {
-    --bg: #f4f6f9;
-    --bg-2: #eef1f6;
-    --panel: #ffffff;
-    --border: #e3e8ef;
-    --text: #1a2433;
-    --muted: #6b7787;
-    --primary: #1f5eff;
-    --primary-2: #133fb0;
-    --accent: #ff7a45;
-    --good: #1aa35c;
-    --warn: #e8a83c;
-    --bad: #e25555;
-    --sidebar-bg: #101828;
-    --sidebar-text: #cbd5e1;
-    --chart-grid: #eef1f5;
-    --sidebar-w: 230px;
-    --radius: 14px;
-    --shadow: 0 1px 2px rgba(16,24,40,0.04), 0 1px 3px rgba(16,24,40,0.06);
-    --shadow-lg: 0 10px 30px rgba(16,24,40,0.10);
+    --page: #f9f9f7;
+    --surface: #fcfcfb;
+    --ink: #0b0b0b;
+    --ink-2: #52514e;
+    --muted: #898781;
+    --grid: #e1e0d9;
+    --baseline: #c3c2b7;
+    --border: rgba(11,11,11,0.10);
+    --s1: #2a78d6;  /* blue   — 7-Eleven / primary   */
+    --s2: #1baf7a;  /* aqua   — BP                    */
+    --s3: #eda100;  /* yellow — Shell                 */
+    --s4: #008300;  /* green  — United                */
+    --seq-150: #b7d3f6;
+    --seq-250: #86b6ef;
+    --good: #0ca30c;
+    --good-text: #006300;
+    --warning: #fab219;
+    --serious: #ec835a;
+    --critical: #d03b3b;
+    --sidebar-bg: #131312;
+    --sidebar-ink: #c3c2b7;
+    --accent-wash: rgba(42,120,214,0.08);
+    --sidebar-w: 232px;
+    --radius: 12px;
+    --shadow: 0 1px 2px rgba(11,11,11,0.04), 0 1px 3px rgba(11,11,11,0.05);
+    --shadow-lg: 0 10px 30px rgba(11,11,11,0.10);
   }
   html[data-theme="dark"] {
-    --bg: #0b1120;
-    --bg-2: #0f1729;
-    --panel: #151d2e;
-    --border: #243047;
-    --text: #e8edf5;
-    --muted: #93a1b5;
-    --sidebar-bg: #0a0f1c;
-    --sidebar-text: #aab4c4;
-    --chart-grid: #1e2942;
+    --page: #0d0d0d;
+    --surface: #1a1a19;
+    --ink: #ffffff;
+    --ink-2: #c3c2b7;
+    --muted: #898781;
+    --grid: #2c2c2a;
+    --baseline: #383835;
+    --border: rgba(255,255,255,0.10);
+    --s1: #3987e5;
+    --s2: #199e70;
+    --s3: #c98500;
+    --s4: #008300;
+    --seq-150: #184f95;
+    --seq-250: #1c5cab;
+    --good-text: #0ca30c;
+    --sidebar-bg: #0a0a09;
+    --accent-wash: rgba(57,135,229,0.12);
     --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 1px 3px rgba(0,0,0,0.4);
     --shadow-lg: 0 12px 36px rgba(0,0,0,0.45);
   }
@@ -44,388 +58,352 @@
   html { scroll-behavior: smooth; }
   body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background: var(--bg);
-    color: var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--page);
+    color: var(--ink);
     -webkit-font-smoothing: antialiased;
-    transition: background 0.3s ease, color 0.3s ease;
+    transition: background 0.25s ease, color 0.25s ease;
   }
+  button { font-family: inherit; }
 
-  /* ---------- layout ---------- */
+  /* ============ layout ============ */
   .shell { display: flex; min-height: 100vh; }
-
   .sidebar {
-    width: var(--sidebar-w);
-    flex-shrink: 0;
-    background: var(--sidebar-bg);
-    color: var(--sidebar-text);
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    padding: 1.2rem 0.9rem;
-    transition: background 0.3s ease;
-    z-index: 20;
+    width: var(--sidebar-w); flex-shrink: 0;
+    background: var(--sidebar-bg); color: var(--sidebar-ink);
+    position: sticky; top: 0; height: 100vh;
+    display: flex; flex-direction: column;
+    padding: 1.2rem 0.9rem; z-index: 20;
   }
-  .sidebar .brand {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    padding: 0.4rem 0.5rem 1.2rem;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-    margin-bottom: 1rem;
-  }
-  .sidebar .brand .logo {
-    width: 32px; height: 32px;
-    border-radius: 9px;
-    background: linear-gradient(135deg, var(--primary), #00c2a8);
+  .brand { display: flex; align-items: center; gap: 0.6rem; padding: 0.3rem 0.4rem 1.1rem; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 0.9rem; }
+  .brand .logo {
+    width: 34px; height: 34px; border-radius: 9px; flex-shrink: 0;
+    background: linear-gradient(135deg, #2a78d6, #1baf7a);
     display: flex; align-items: center; justify-content: center;
     font-weight: 800; font-size: 0.85rem; color: #fff;
-    box-shadow: 0 4px 12px rgba(31,94,255,0.4);
-    animation: logoPulse 4s ease-in-out infinite;
   }
-  @keyframes logoPulse {
-    0%, 100% { box-shadow: 0 4px 12px rgba(31,94,255,0.35); }
-    50% { box-shadow: 0 4px 22px rgba(0,194,168,0.55); }
-  }
-  .sidebar .brand .name { font-weight: 700; font-size: 0.92rem; color: #fff; line-height: 1.1; }
-  .sidebar .brand .sub { font-size: 0.68rem; color: #8896a8; }
-
+  .brand .name { font-weight: 700; font-size: 0.92rem; color: #fff; line-height: 1.15; }
+  .brand .sub { font-size: 0.67rem; color: #898781; }
+  .sidebar nav { overflow-y: auto; }
   .sidebar nav a {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    color: #aab4c4;
-    text-decoration: none;
-    font-size: 0.83rem;
-    padding: 0.55rem 0.7rem;
-    border-radius: 8px;
-    margin-bottom: 0.15rem;
-    position: relative;
-    transition: background 0.18s, color 0.18s, padding-left 0.18s;
+    display: flex; align-items: center; gap: 0.55rem;
+    color: #a4a29a; text-decoration: none; font-size: 0.82rem;
+    padding: 0.5rem 0.7rem; border-radius: 8px; margin-bottom: 0.1rem;
+    position: relative; transition: background 0.15s, color 0.15s;
   }
-  .sidebar nav a .ico { width: 18px; text-align: center; opacity: 0.85; }
-  .sidebar nav a:hover { background: rgba(255,255,255,0.06); color: #fff; padding-left: 0.95rem; }
-  .sidebar nav a.active { background: rgba(31,94,255,0.18); color: #fff; }
+  .sidebar nav a .ico { width: 18px; text-align: center; opacity: 0.85; font-size: 0.85rem; }
+  .sidebar nav a:hover { background: rgba(255,255,255,0.06); color: #fff; }
+  .sidebar nav a.active { background: rgba(42,120,214,0.22); color: #fff; }
   .sidebar nav a.active::before {
-    content: ""; position: absolute; left: 0; top: 18%; bottom: 18%;
-    width: 3px; border-radius: 3px; background: linear-gradient(180deg, var(--primary), #00c2a8);
+    content: ""; position: absolute; left: 0; top: 20%; bottom: 20%;
+    width: 3px; border-radius: 3px; background: var(--s1);
   }
-
-  .sidebar .footer-note {
-    margin-top: auto;
-    font-size: 0.68rem;
-    color: #6b7888;
-    padding: 0.6rem;
-    border-top: 1px solid rgba(255,255,255,0.08);
-  }
+  .sidebar .footer-note { margin-top: auto; font-size: 0.67rem; color: #6e6d66; padding: 0.7rem 0.4rem 0; border-top: 1px solid rgba(255,255,255,0.08); line-height: 1.5; }
 
   .main { flex: 1; min-width: 0; }
-
   .topbar {
-    background: var(--panel);
-    border-bottom: 1px solid var(--border);
-    padding: 1rem 2rem;
-    position: sticky;
-    top: 0;
-    z-index: 15;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 0.6rem;
-    transition: background 0.3s ease, border-color 0.3s ease;
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 0.9rem 2rem; position: sticky; top: 0; z-index: 15;
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem;
   }
-  .topbar .title-block h1 { font-size: 1.12rem; margin: 0; }
-  .topbar .title-block .crumb { font-size: 0.72rem; color: var(--muted); margin-top: 0.15rem; }
-  .topbar .right { display: flex; align-items: center; gap: 0.7rem; flex-wrap: wrap; }
-  .scope-pill {
-    font-size: 0.72rem;
-    color: var(--primary);
-    background: rgba(31,94,255,0.08);
-    border: 1px solid rgba(31,94,255,0.25);
-    border-radius: 999px;
-    padding: 0.3rem 0.8rem;
-    white-space: nowrap;
+  .topbar h1 { font-size: 1.08rem; margin: 0; }
+  .topbar .crumb { font-size: 0.72rem; color: var(--muted); margin-top: 0.15rem; }
+  .topbar .right { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+  .pill {
+    font-size: 0.72rem; border-radius: 999px; padding: 0.28rem 0.75rem;
+    border: 1px solid var(--border); color: var(--ink-2); background: var(--page); white-space: nowrap;
   }
-  .live-pill {
-    font-size: 0.72rem; color: var(--good);
-    background: rgba(26,163,92,0.1);
-    border: 1px solid rgba(26,163,92,0.3);
-    border-radius: 999px; padding: 0.3rem 0.7rem;
-    display: flex; align-items: center; gap: 0.4rem; white-space: nowrap;
-  }
-  .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--good); animation: blink 1.6s ease-in-out infinite; }
-  @keyframes blink { 0%,100% { opacity: 1; transform: scale(1);} 50% { opacity: 0.3; transform: scale(0.7);} }
+  .pill.sim { color: var(--s1); border-color: var(--s1); background: var(--accent-wash); }
   .theme-toggle {
-    border: 1px solid var(--border); background: var(--bg-2); color: var(--text);
-    width: 38px; height: 32px; border-radius: 9px; cursor: pointer; font-size: 1rem;
-    display: flex; align-items: center; justify-content: center; transition: transform 0.15s, background 0.2s;
+    border: 1px solid var(--border); background: var(--page); color: var(--ink);
+    width: 38px; height: 32px; border-radius: 9px; cursor: pointer; font-size: 0.95rem;
+    display: flex; align-items: center; justify-content: center; transition: transform 0.15s;
   }
-  .theme-toggle:hover { transform: translateY(-1px) rotate(-8deg); }
+  .theme-toggle:hover { transform: translateY(-1px); }
 
-  /* ---------- live ticker ---------- */
-  .ticker {
-    background: var(--sidebar-bg);
-    color: #cbd5e1;
-    overflow: hidden;
-    white-space: nowrap;
-    border-bottom: 1px solid var(--border);
-    font-size: 0.78rem;
-    position: relative;
-  }
-  .ticker .track { display: inline-flex; gap: 2.5rem; padding: 0.5rem 0; animation: scroll-left 38s linear infinite; }
-  .ticker:hover .track { animation-play-state: paused; }
-  .ticker .item { display: inline-flex; align-items: center; gap: 0.45rem; }
-  .ticker .item .brand-name { color: #fff; font-weight: 600; }
-  .ticker .item .price { font-variant-numeric: tabular-nums; font-weight: 700; }
-  .ticker .up { color: #ff8a6a; } .ticker .down { color: #54d18c; }
-  .ticker .label { color: #00c2a8; font-weight: 700; letter-spacing: 0.04em; padding-right: 0.4rem; }
-  @keyframes scroll-left { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-
-  .content { padding: 1.8rem 2rem 4rem; max-width: 1320px; }
-
-  section { margin-bottom: 2.6rem; scroll-margin-top: 6.5rem; }
-  /* scroll reveal */
-  .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .content { padding: 1.7rem 2rem 4rem; max-width: 1280px; }
+  section { margin-bottom: 2.8rem; scroll-margin-top: 5.5rem; }
+  .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.55s ease, transform 0.55s ease; }
   .reveal.in { opacity: 1; transform: none; }
 
-  .section-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 0.9rem; flex-wrap: wrap; gap: 0.4rem;}
-  .section-head h2 { font-size: 1.05rem; margin: 0; display: flex; align-items: center; gap: 0.5rem; }
-  .section-head h2 .num { font-size: 0.7rem; color: var(--primary); background: rgba(31,94,255,0.1); border-radius: 6px; padding: 0.15rem 0.45rem; font-weight: 700; }
-  .section-head .desc { font-size: 0.8rem; color: var(--muted); max-width: 560px; }
+  .section-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 0.9rem; flex-wrap: wrap; gap: 0.4rem; }
+  .section-head h2 { font-size: 1.02rem; margin: 0; display: flex; align-items: center; gap: 0.5rem; }
+  .section-head h2 .num { font-size: 0.68rem; color: var(--s1); background: var(--accent-wash); border-radius: 6px; padding: 0.15rem 0.45rem; font-weight: 700; }
+  .section-head .desc { font-size: 0.79rem; color: var(--muted); max-width: 580px; }
 
-  /* ---------- hero ---------- */
+  /* ============ hero ============ */
   .hero {
-    border-radius: var(--radius);
-    padding: 1.6rem 1.8rem;
-    color: #fff;
-    background: linear-gradient(120deg, #133fb0, #1f5eff 45%, #00c2a8);
-    background-size: 200% 200%;
-    animation: gradientShift 12s ease infinite;
+    border-radius: var(--radius); padding: 1.7rem 1.9rem; margin-bottom: 1.8rem;
+    color: #fff; position: relative; overflow: hidden;
+    background: linear-gradient(120deg, #123f77, #2a78d6 55%, #1baf7a);
     box-shadow: var(--shadow-lg);
-    margin-bottom: 1.6rem;
-    position: relative;
-    overflow: hidden;
   }
-  @keyframes gradientShift { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
-  .hero::after {
-    content: ""; position: absolute; right: -60px; top: -60px; width: 260px; height: 260px;
-    background: radial-gradient(circle, rgba(255,255,255,0.18), transparent 70%); border-radius: 50%;
-  }
-  .hero h2 { margin: 0 0 0.4rem; font-size: 1.4rem; }
-  .hero p { margin: 0; font-size: 0.9rem; max-width: 640px; color: rgba(255,255,255,0.9); line-height: 1.5; }
-  .hero .hero-stats { display: flex; gap: 2rem; margin-top: 1.3rem; flex-wrap: wrap; }
-  .hero .hero-stats .hs .n { font-size: 1.5rem; font-weight: 800; }
-  .hero .hero-stats .hs .l { font-size: 0.72rem; opacity: 0.85; }
+  .hero::after { content: ""; position: absolute; right: -70px; top: -70px; width: 280px; height: 280px; background: radial-gradient(circle, rgba(255,255,255,0.16), transparent 70%); border-radius: 50%; }
+  .hero h2 { margin: 0 0 0.4rem; font-size: 1.35rem; }
+  .hero p { margin: 0; font-size: 0.89rem; max-width: 660px; color: rgba(255,255,255,0.92); line-height: 1.55; }
+  .hero .figure { margin-top: 1.2rem; display: flex; align-items: baseline; gap: 0.7rem; flex-wrap: wrap; }
+  .hero .figure .big { font-size: 3rem; font-weight: 700; letter-spacing: -0.02em; }
+  .hero .figure .cap { font-size: 0.78rem; color: rgba(255,255,255,0.85); max-width: 300px; line-height: 1.45; }
 
-  /* ---------- KPI cards ---------- */
-  .kpi-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(195px, 1fr));
-    gap: 0.9rem;
+  /* ============ stat tiles ============ */
+  .tile-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 0.9rem; }
+  .tile {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 0.95rem 1.05rem;
+    transition: transform 0.16s ease, box-shadow 0.16s ease;
   }
-  .kpi-card {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    padding: 1rem 1.1rem;
-    position: relative;
-    overflow: hidden;
-    transition: transform 0.18s ease, box-shadow 0.18s ease;
-  }
-  .kpi-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
-  .kpi-card::before {
-    content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; opacity: 0.85;
-  }
-  .kpi-card.blue::before { background: var(--primary); }
-  .kpi-card.green::before { background: var(--good); }
-  .kpi-card.orange::before { background: var(--accent); }
-  .kpi-card.amber::before { background: var(--warn); }
-  .kpi-card .top-row { display: flex; justify-content: space-between; align-items: flex-start; }
-  .kpi-card .ico {
-    width: 36px; height: 36px;
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.05rem;
-  }
-  .kpi-card .trend { font-size: 0.7rem; font-weight: 700; padding: 0.15rem 0.45rem; border-radius: 6px; }
-  .kpi-card .trend.up { color: var(--good); background: rgba(26,163,92,0.1); }
-  .kpi-card .trend.flat { color: var(--muted); background: var(--bg-2); }
-  .kpi-card .value { font-size: 1.55rem; font-weight: 800; margin-top: 0.6rem; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
-  .kpi-card .label { font-size: 0.78rem; color: var(--muted); margin-top: 0.15rem; }
-  .kpi-card .src { font-size: 0.66rem; color: #9aa5b3; margin-top: 0.5rem; }
-  .kpi-card.blue .ico { background: rgba(31,94,255,0.12); color: var(--primary); }
-  .kpi-card.green .ico { background: rgba(26,163,92,0.12); color: var(--good); }
-  .kpi-card.orange .ico { background: rgba(255,122,69,0.12); color: var(--accent); }
-  .kpi-card.amber .ico { background: rgba(232,168,60,0.15); color: #b07a16; }
-  .spark { margin-top: 0.6rem; height: 30px; }
+  .tile:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+  .tile .label { font-size: 0.75rem; color: var(--ink-2); }
+  .tile .value { font-size: 1.6rem; font-weight: 650; margin-top: 0.35rem; letter-spacing: -0.01em; }
+  .tile .delta { font-size: 0.72rem; margin-top: 0.3rem; color: var(--muted); }
+  .tile .delta .up { color: var(--good-text); font-weight: 650; }
+  .tile .spark { margin-top: 0.55rem; height: 30px; }
+  .tile .src { font-size: 0.65rem; color: var(--muted); margin-top: 0.5rem; }
 
-  /* ---------- panel / widget ---------- */
+  /* ============ panels & grids ============ */
   .panel {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    padding: 1.2rem 1.3rem;
-    transition: background 0.3s ease, border-color 0.3s ease;
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 1.15rem 1.25rem;
   }
-  .grid-2 { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 1rem; }
-  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
-  @media (max-width: 900px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+  .panel h3 { margin: 0 0 0.3rem; font-size: 0.92rem; }
+  .panel .sub { font-size: 0.75rem; color: var(--muted); margin: 0 0 0.9rem; }
+  .grid-2 { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 1rem; align-items: start; }
+  .grid-2e { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 940px) { .grid-2, .grid-2e { grid-template-columns: 1fr; } }
 
-  .panel h3 { margin: 0 0 0.8rem; font-size: 0.9rem; display: flex; align-items: center; gap: 0.45rem; }
-  .chart-wrap { position: relative; height: 250px; }
-  .chart-wrap.short { height: 180px; }
-
-  /* ---------- savings calculator ---------- */
-  .calc-row { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; }
-  .calc-field { flex: 1 1 180px; }
-  .calc-field label { font-size: 0.74rem; color: var(--muted); display: flex; justify-content: space-between; margin-bottom: 0.4rem; }
-  .calc-field label b { color: var(--primary); font-variant-numeric: tabular-nums; }
-  input[type=range] {
-    -webkit-appearance: none; width: 100%; height: 6px; border-radius: 999px;
-    background: var(--bg-2); outline: none; cursor: pointer;
+  /* ============ filter row ============ */
+  .filter-row { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .filter-row .flabel { font-size: 0.74rem; color: var(--muted); }
+  .seg { display: inline-flex; border: 1px solid var(--border); border-radius: 9px; overflow: hidden; background: var(--surface); }
+  .seg button {
+    border: none; background: transparent; color: var(--ink-2); cursor: pointer;
+    font-size: 0.78rem; padding: 0.42rem 0.9rem; transition: background 0.15s, color 0.15s;
   }
+  .seg button + button { border-left: 1px solid var(--border); }
+  .seg button:hover { background: var(--page); }
+  .seg button.active { background: var(--accent-wash); color: var(--s1); font-weight: 650; }
+
+  /* ============ charts ============ */
+  .chart-head { display: flex; align-items: center; justify-content: space-between; gap: 0.6rem; flex-wrap: wrap; }
+  .legend { display: flex; gap: 1rem; flex-wrap: wrap; margin: 0.2rem 0 0.6rem; }
+  .legend .key {
+    display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; color: var(--ink-2);
+    cursor: pointer; border: none; background: none; padding: 0.15rem 0; user-select: none;
+  }
+  .legend .key .ln { width: 16px; height: 2.5px; border-radius: 2px; }
+  .legend .key.off { opacity: 0.35; }
+  .chart-wrap { position: relative; }
+  .chart-wrap svg { display: block; width: 100%; }
+  .viz-tip {
+    position: absolute; pointer-events: none; z-index: 5;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 9px;
+    box-shadow: var(--shadow-lg); padding: 0.55rem 0.7rem; min-width: 150px;
+    opacity: 0; transition: opacity 0.12s;
+  }
+  .viz-tip .tdate { font-size: 0.7rem; color: var(--muted); margin-bottom: 0.35rem; }
+  .viz-tip .trow { display: flex; align-items: center; gap: 0.45rem; font-size: 0.76rem; padding: 0.11rem 0; }
+  .viz-tip .trow .ln { width: 12px; height: 2.5px; border-radius: 2px; flex-shrink: 0; }
+  .viz-tip .trow .tv { font-weight: 700; color: var(--ink); margin-left: auto; font-variant-numeric: tabular-nums; }
+  .viz-tip .trow .tn { color: var(--ink-2); }
+  .table-toggle {
+    border: 1px solid var(--border); background: var(--page); color: var(--ink-2);
+    font-size: 0.72rem; border-radius: 8px; padding: 0.3rem 0.7rem; cursor: pointer; transition: background 0.15s;
+  }
+  .table-toggle:hover { background: var(--accent-wash); color: var(--s1); }
+  .table-toggle[aria-pressed="true"] { background: var(--accent-wash); color: var(--s1); border-color: var(--s1); }
+
+  /* ============ tables ============ */
+  table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+  thead th {
+    text-align: left; color: var(--muted); font-weight: 600; font-size: 0.7rem;
+    text-transform: uppercase; letter-spacing: 0.04em; padding: 0.5rem 0.55rem;
+    border-bottom: 1px solid var(--baseline); white-space: nowrap;
+  }
+  thead th.sortable { cursor: pointer; user-select: none; }
+  thead th.sortable:hover { color: var(--ink); }
+  thead th .dir { font-size: 0.62rem; }
+  tbody td { padding: 0.52rem 0.55rem; border-bottom: 1px solid var(--grid); vertical-align: middle; font-variant-numeric: tabular-nums; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr { transition: background 0.12s; }
+  tbody tr:hover { background: var(--page); }
+  .num-cell { text-align: right; }
+  th.num-cell { text-align: right; }
+  .brand-key { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 0.45rem; vertical-align: 1px; }
+  .badge {
+    display: inline-block; font-size: 0.65rem; border-radius: 999px; padding: 0.08rem 0.5rem;
+    border: 1px solid var(--border); color: var(--ink-2); font-weight: 600;
+  }
+  .badge.lowest { color: var(--good-text); border-color: var(--good); background: rgba(12,163,12,0.08); }
+  .badge.include { color: var(--s1); border-color: var(--s1); background: var(--accent-wash); }
+  .badge.extend { color: #9a6a00; border-color: var(--s3); background: rgba(237,161,0,0.09); }
+  html[data-theme="dark"] .badge.extend { color: #eda100; }
+  .badge.new { color: var(--serious); border-color: var(--serious); background: rgba(236,131,90,0.1); }
+  .under-cap { color: var(--good-text); font-weight: 650; }
+  .at-cap { color: var(--muted); }
+  td.cap-cell { white-space: nowrap; }
+
+  /* cap meter */
+  .cap-meter { display: inline-block; width: 68px; height: 5px; border-radius: 999px; background: var(--seq-150); vertical-align: middle; margin-right: 0.5rem; overflow: hidden; }
+  .cap-meter i { display: block; height: 100%; border-radius: 999px; background: var(--s1); }
+
+  /* ============ calculator ============ */
+  .calc-row { display: flex; gap: 1.1rem; flex-wrap: wrap; margin-bottom: 1.1rem; }
+  .calc-field { flex: 1 1 170px; }
+  .calc-field label { font-size: 0.74rem; color: var(--ink-2); display: flex; justify-content: space-between; margin-bottom: 0.4rem; }
+  .calc-field label b { color: var(--s1); font-variant-numeric: tabular-nums; }
+  input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 5px; border-radius: 999px; background: var(--grid); outline: none; cursor: pointer; }
   input[type=range]::-webkit-slider-thumb {
     -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%;
-    background: var(--primary); border: 3px solid var(--panel); box-shadow: var(--shadow); cursor: pointer;
-    transition: transform 0.12s;
+    background: var(--s1); border: 3px solid var(--surface); box-shadow: var(--shadow); cursor: pointer; transition: transform 0.12s;
   }
-  input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
-  .calc-result {
-    margin-top: 0.4rem; padding: 1rem 1.1rem; border-radius: 12px;
-    background: linear-gradient(120deg, rgba(26,163,92,0.1), rgba(0,194,168,0.08));
-    border: 1px solid rgba(26,163,92,0.25);
-    display: flex; align-items: baseline; gap: 0.8rem; flex-wrap: wrap;
-  }
-  .calc-result .big { font-size: 2rem; font-weight: 800; color: var(--good); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
-  .calc-result .cap { font-size: 0.78rem; color: var(--muted); }
+  input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+  input[type=range]::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: var(--s1); border: 3px solid var(--surface); cursor: pointer; }
+  .calc-result { display: flex; align-items: baseline; gap: 0.8rem; flex-wrap: wrap; margin-bottom: 0.9rem; }
+  .calc-result .big { font-size: 2.3rem; font-weight: 700; color: var(--good-text); letter-spacing: -0.02em; }
+  .calc-result .cap { font-size: 0.76rem; color: var(--muted); max-width: 320px; line-height: 1.45; }
+  .cmp-bars { margin-top: 0.4rem; }
+  .cmp-bar { display: grid; grid-template-columns: 110px 1fr 60px; align-items: center; gap: 0.6rem; margin-bottom: 0.55rem; font-size: 0.75rem; }
+  .cmp-bar .bl { color: var(--ink-2); }
+  .cmp-bar .track { height: 14px; position: relative; }
+  .cmp-bar .fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 0 4px 4px 0; transition: width 0.4s ease; }
+  .cmp-bar .bv { font-weight: 700; font-variant-numeric: tabular-nums; text-align: right; }
 
-  /* ---------- process stepper ---------- */
-  .stepper { display: flex; flex-wrap: wrap; gap: 0; align-items: stretch; }
+  /* ============ alert simulator ============ */
+  .alert-stats { display: flex; gap: 1.6rem; flex-wrap: wrap; margin-bottom: 0.9rem; }
+  .alert-stats .as .v { font-size: 1.45rem; font-weight: 700; }
+  .alert-stats .as .l { font-size: 0.71rem; color: var(--muted); }
+  .notif-list { list-style: none; margin: 0.4rem 0 0; padding: 0; max-height: 240px; overflow-y: auto; }
+  .notif-list li {
+    display: flex; gap: 0.7rem; align-items: flex-start;
+    padding: 0.55rem 0.6rem; border-radius: 9px; margin-bottom: 0.35rem;
+    background: var(--page); border: 1px solid var(--border); font-size: 0.78rem;
+  }
+  .notif-list .bell { font-size: 0.95rem; }
+  .notif-list .nb b { display: block; font-size: 0.79rem; }
+  .notif-list .nb span { color: var(--muted); font-size: 0.72rem; }
+  .notif-empty { font-size: 0.78rem; color: var(--muted); padding: 0.8rem 0.3rem; }
+
+  /* ============ stepper ============ */
+  .stepper { display: flex; flex-wrap: wrap; align-items: stretch; }
   .step {
-    background: var(--bg-2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 0.7rem 0.9rem;
-    font-size: 0.78rem;
-    flex: 1 1 150px;
-    min-width: 150px;
-    position: relative;
+    background: var(--page); border: 1px solid var(--border); border-radius: 10px;
+    padding: 0.65rem 0.85rem; font-size: 0.77rem; flex: 1 1 150px; min-width: 150px;
     transition: transform 0.15s, box-shadow 0.15s;
   }
-  .step:hover { transform: translateY(-3px); box-shadow: var(--shadow); z-index: 2; }
-  .step .tag { display:block; font-size: 0.66rem; color: var(--primary); font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.3rem; }
-  .step.decision { background: rgba(232,168,60,0.1); border-color: rgba(232,168,60,0.35); }
-  .step.decision .tag { color: #b07a16; }
-  .step.parallel { background: rgba(26,163,92,0.08); border-color: rgba(26,163,92,0.3); }
-  .step.parallel .tag { color: var(--good); }
-  .arrow-sep { display: flex; align-items: center; justify-content: center; color: #b7c0cc; padding: 0 0.35rem; font-size: 1rem; }
+  .step:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+  .step .tag { display: block; font-size: 0.64rem; color: var(--s1); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.3rem; }
+  .step small { color: var(--muted); }
+  .step.decision { border-color: var(--s3); background: rgba(237,161,0,0.06); }
+  .step.decision .tag { color: #9a6a00; }
+  html[data-theme="dark"] .step.decision .tag { color: #eda100; }
+  .step.parallel { border-color: var(--s2); background: rgba(27,175,122,0.06); }
+  .step.parallel .tag { color: var(--good-text); }
+  .arrow-sep { display: flex; align-items: center; color: var(--baseline); padding: 0 0.35rem; font-size: 1rem; }
 
-  /* ---------- exceptions ---------- */
   .ex-list { list-style: none; margin: 0; padding: 0; }
-  .ex-list li {
-    display: flex; gap: 0.6rem;
-    padding: 0.5rem 0;
-    border-bottom: 1px dashed var(--border);
-    font-size: 0.82rem;
-  }
+  .ex-list li { display: flex; gap: 0.6rem; padding: 0.5rem 0; border-bottom: 1px solid var(--grid); font-size: 0.8rem; }
   .ex-list li:last-child { border-bottom: none; }
-  .ex-list .code { color: var(--bad); font-weight: 700; font-size: 0.74rem; min-width: 34px; }
+  .ex-list .code { color: var(--critical); font-weight: 700; font-size: 0.73rem; min-width: 34px; font-variant-numeric: tabular-nums; }
 
-  /* ---------- table ---------- */
-  table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
-  thead th {
-    text-align: left;
-    color: var(--muted);
-    font-weight: 600;
-    font-size: 0.72rem;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    padding: 0.5rem 0.6rem;
-    border-bottom: 2px solid var(--border);
-  }
-  tbody td { padding: 0.55rem 0.6rem; border-bottom: 1px solid var(--border); vertical-align: top; }
-  tbody tr:last-child td { border-bottom: none; }
-  tbody tr { transition: background 0.15s; }
-  tbody tr:hover { background: var(--bg-2); }
+  /* ============ class cards ============ */
+  .class-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(255px, 1fr)); gap: 1rem; }
+  .class-box { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: var(--surface); box-shadow: var(--shadow); transition: transform 0.16s, box-shadow 0.16s; }
+  .class-box:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+  .class-box .head { background: var(--page); padding: 0.6rem 0.9rem; font-weight: 700; font-size: 0.84rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+  .class-box.highlight .head { background: rgba(236,131,90,0.08); }
+  .class-box .body { padding: 0.85rem 0.9rem; font-size: 0.78rem; color: var(--ink-2); line-height: 1.55; }
+  .class-box .body b { color: var(--ink); }
 
-  .badge { display: inline-block; font-size: 0.68rem; border-radius: 999px; padding: 0.1rem 0.55rem; border: 1px solid var(--border); color: var(--muted); }
-  .badge.include { color: var(--primary); border-color: rgba(31,94,255,0.4); background: rgba(31,94,255,0.06); }
-  .badge.extend { color: #b07a16; border-color: rgba(232,168,60,0.5); background: rgba(232,168,60,0.08); }
-  .badge.new { color: var(--accent); border-color: rgba(255,122,69,0.5); background: rgba(255,122,69,0.08); }
-
-  /* ---------- class cards ---------- */
-  .class-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
-  .class-box { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: var(--panel); box-shadow: var(--shadow); transition: transform 0.18s, box-shadow 0.18s; }
-  .class-box:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
-  .class-box .head { background: var(--bg-2); padding: 0.6rem 0.9rem; font-weight: 700; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
-  .class-box.highlight .head { background: rgba(255,122,69,0.1); }
-  .class-box .body { padding: 0.85rem 0.9rem; font-size: 0.79rem; color: var(--muted); }
-  .class-box .body b { color: var(--text); }
-
-  /* ---------- lifecycle ---------- */
+  /* ============ state machine ============ */
   .lifecycle { display: flex; flex-wrap: wrap; gap: 0.45rem; align-items: center; }
-  .life-state { background: var(--bg-2); border: 1px solid var(--border); border-radius: 999px; padding: 0.4rem 0.9rem; font-size: 0.78rem; transition: transform 0.15s, background 0.15s; cursor: default; }
-  .life-state:hover { transform: scale(1.06); background: rgba(31,94,255,0.1); border-color: rgba(31,94,255,0.35); }
-  .life-state.terminal { background: rgba(255,122,69,0.1); border-color: rgba(255,122,69,0.4); color: var(--accent); font-weight: 600; }
-  .life-arrow { color: #b7c0cc; }
+  .life-state {
+    background: var(--page); border: 1px solid var(--border); border-radius: 999px;
+    padding: 0.42rem 0.95rem; font-size: 0.78rem; cursor: pointer; border-style: solid;
+    transition: transform 0.14s, background 0.14s, border-color 0.14s; font-family: inherit; color: var(--ink);
+  }
+  .life-state:hover { transform: scale(1.05); }
+  .life-state.sel { background: var(--accent-wash); border-color: var(--s1); color: var(--s1); font-weight: 650; }
+  .life-state.terminal { border-color: var(--serious); color: var(--serious); font-weight: 600; }
+  .life-state.terminal.sel { background: rgba(236,131,90,0.1); }
+  .life-arrow { color: var(--baseline); }
+  .state-detail {
+    margin-top: 1rem; padding: 0.9rem 1rem; border-radius: 10px;
+    background: var(--page); border: 1px solid var(--border); font-size: 0.8rem; line-height: 1.6; color: var(--ink-2);
+  }
+  .state-detail b { color: var(--ink); }
 
-  /* ---------- UX scorecard ---------- */
-  .score-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px,1fr)); gap: 1rem; }
-  .score-card { border-radius: var(--radius); padding: 1.1rem 1.1rem; border: 1px solid var(--border); background: var(--panel); box-shadow: var(--shadow); transition: transform 0.18s; }
-  .score-card:hover { transform: translateY(-3px); }
-  .score-card .sh { display: flex; align-items: center; gap: 0.9rem; margin-bottom: 0.7rem; }
-  .gauge { position: relative; width: 56px; height: 56px; flex-shrink: 0; }
+  /* ============ scorecard ============ */
+  .score-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1rem; }
+  .score-card { border-radius: var(--radius); padding: 1.05rem 1.1rem; border: 1px solid var(--border); background: var(--surface); box-shadow: var(--shadow); transition: transform 0.16s; }
+  .score-card:hover { transform: translateY(-2px); }
+  .score-card .sh { display: flex; align-items: center; gap: 0.85rem; margin-bottom: 0.7rem; }
+  .gauge { position: relative; width: 54px; height: 54px; flex-shrink: 0; }
   .gauge svg { transform: rotate(-90deg); }
-  .gauge .num { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 1.05rem; font-weight: 800; }
-  .score-card .sh .label { font-weight: 700; font-size: 0.92rem; }
-  .score-card .sh .label small { display: block; font-weight: 500; color: var(--muted); font-size: 0.7rem; margin-top: 0.1rem; }
-  .score-card.good .num { color: var(--good); } .score-card.good .ring { stroke: var(--good); }
-  .score-card.bad .num { color: var(--warn); } .score-card.bad .ring { stroke: var(--warn); }
-  .score-card.ugly .num { color: var(--bad); } .score-card.ugly .ring { stroke: var(--bad); }
-  .ring-bg { stroke: var(--bg-2); }
-  .score-card ul { margin: 0; padding-left: 1.1rem; font-size: 0.81rem; color: var(--text); }
-  .score-card li { margin-bottom: 0.35rem; }
+  .gauge .num { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 1.05rem; font-weight: 700; color: var(--ink); }
+  .score-card .sh .label { font-weight: 700; font-size: 0.9rem; }
+  .score-card .sh .label small { display: block; font-weight: 500; color: var(--muted); font-size: 0.69rem; margin-top: 0.1rem; }
+  .ring-bg { stroke: var(--grid); }
+  .score-card.good .ring { stroke: var(--good); }
+  .score-card.warn .ring { stroke: var(--warning); }
+  .score-card.crit .ring { stroke: var(--critical); }
+  .score-card ul { margin: 0; padding-left: 1.05rem; font-size: 0.8rem; color: var(--ink-2); }
+  .score-card li { margin-bottom: 0.35rem; line-height: 1.45; }
 
-  /* ---------- documents ---------- */
-  .doc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 0.9rem; }
+  /* ============ diagram gallery ============ */
+  .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 1rem; }
+  .thumb {
+    border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden;
+    background: var(--surface); box-shadow: var(--shadow); cursor: zoom-in; padding: 0; text-align: left;
+    transition: transform 0.16s, box-shadow 0.16s; display: block; width: 100%;
+  }
+  .thumb:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+  .thumb .imgbox { height: 160px; overflow: hidden; background: #fff; display: flex; align-items: flex-start; justify-content: center; border-bottom: 1px solid var(--border); }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+  .thumb .cap { padding: 0.6rem 0.8rem; font-size: 0.78rem; font-weight: 650; color: var(--ink); }
+  .thumb .cap small { display: block; font-weight: 400; color: var(--muted); font-size: 0.7rem; margin-top: 0.15rem; }
+  .lightbox {
+    position: fixed; inset: 0; z-index: 60; background: rgba(0,0,0,0.78);
+    display: none; align-items: center; justify-content: center; padding: 2.2rem; cursor: zoom-out;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 100%; max-height: 92vh; border-radius: 8px; background: #fff; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+  .lightbox .lb-cap { position: fixed; bottom: 0.9rem; left: 0; right: 0; text-align: center; color: #fff; font-size: 0.82rem; }
+
+  /* ============ documents ============ */
+  .doc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(225px, 1fr)); gap: 0.9rem; }
   .doc-card {
-    background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
-    box-shadow: var(--shadow); padding: 0.9rem 1rem; text-decoration: none; color: var(--text);
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 0.85rem 1rem; text-decoration: none; color: var(--ink);
     display: flex; gap: 0.7rem; align-items: flex-start; transition: box-shadow 0.15s, transform 0.15s, border-color 0.15s;
   }
-  .doc-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); border-color: rgba(31,94,255,0.4); }
-  .doc-card .dico { font-size: 1.1rem; }
-  .doc-card .title { font-weight: 700; font-size: 0.86rem; }
-  .doc-card .desc { color: var(--muted); font-size: 0.76rem; margin-top: 0.25rem; }
+  .doc-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); border-color: var(--s1); }
+  .doc-card .dico { font-size: 1.05rem; }
+  .doc-card .title { font-weight: 650; font-size: 0.84rem; }
+  .doc-card .desc { color: var(--muted); font-size: 0.74rem; margin-top: 0.22rem; }
 
-  /* ---------- back to top ---------- */
+  /* ============ chrome ============ */
   #toTop {
-    position: fixed; right: 1.5rem; bottom: 1.5rem; width: 44px; height: 44px; border-radius: 50%;
-    background: var(--primary); color: #fff; border: none; cursor: pointer; font-size: 1.2rem;
-    box-shadow: var(--shadow-lg); opacity: 0; pointer-events: none; transition: opacity 0.25s, transform 0.25s;
-    z-index: 30;
+    position: fixed; right: 1.4rem; bottom: 1.4rem; width: 42px; height: 42px; border-radius: 50%;
+    background: var(--s1); color: #fff; border: none; cursor: pointer; font-size: 1.1rem;
+    box-shadow: var(--shadow-lg); opacity: 0; pointer-events: none; transition: opacity 0.25s, transform 0.25s; z-index: 30;
   }
   #toTop.show { opacity: 1; pointer-events: auto; }
   #toTop:hover { transform: translateY(-3px); }
+  #progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; z-index: 40; background: linear-gradient(90deg, var(--s1), var(--s2)); }
+  footer { text-align: center; padding: 1.5rem 1.5rem 3rem; color: var(--muted); font-size: 0.77rem; }
+  footer a { color: var(--s1); }
 
-  /* ---------- scroll progress ---------- */
-  #progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; z-index: 40;
-    background: linear-gradient(90deg, var(--primary), #00c2a8); transition: width 0.1s linear; }
-
-  footer { text-align: center; padding: 2rem 1.5rem 3rem; color: var(--muted); font-size: 0.78rem; }
-  footer a { color: var(--primary); }
+  @media (max-width: 760px) {
+    .sidebar { display: none; }
+    .content { padding: 1.2rem 1rem 3rem; }
+    .topbar { padding: 0.8rem 1rem; }
+  }
 </style>
 </head>
 <body>
 <div id="progress"></div>
 
 <div class="shell">
-
   <aside class="sidebar">
     <div class="brand">
       <div class="logo">SS</div>
@@ -436,13 +414,15 @@
     </div>
     <nav>
       <a href="#overview" class="active"><span class="ico">&#9737;</span> Overview</a>
-      <a href="#business-case"><span class="ico">&#128202;</span> Business Case</a>
-      <a href="#activity"><span class="ico">&#10148;</span> Activity Diagram</a>
+      <a href="#explorer"><span class="ico">&#9981;</span> Price Explorer</a>
+      <a href="#calculator"><span class="ico">&#129518;</span> Savings Calculator</a>
+      <a href="#alerts"><span class="ico">&#128276;</span> Price Drop Alerts</a>
+      <a href="#activity"><span class="ico">&#10148;</span> Activity Flow</a>
       <a href="#usecase"><span class="ico">&#128279;</span> Use Cases</a>
       <a href="#class"><span class="ico">&#128193;</span> Class &amp; CRC</a>
       <a href="#state"><span class="ico">&#9201;</span> State Machine</a>
       <a href="#ui"><span class="ico">&#128241;</span> UI Evaluation</a>
-      <a href="#improvement"><span class="ico">&#128161;</span> Improvement</a>
+      <a href="#diagrams"><span class="ico">&#128506;</span> Diagram Gallery</a>
       <a href="#documents"><span class="ico">&#128196;</span> Documents</a>
     </nav>
     <div class="footer-note">An individual project by Ramkrushna Bhadekar</div>
@@ -450,169 +430,263 @@
 
   <div class="main">
     <div class="topbar">
-      <div class="title-block">
+      <div>
         <h1>Servo Saver — Fuel Price Feature</h1>
-        <div class="crumb">Service Victoria App · Product Analysis by Ramkrushna Bhadekar</div>
+        <div class="crumb">Service Victoria App · Product analysis by Ramkrushna Bhadekar</div>
       </div>
       <div class="right">
-        <span class="live-pill"><span class="live-dot"></span> Live · <span id="clock"></span></span>
-        <span class="scope-pill">Scope: Customer (Motorist)</span>
-        <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">&#127769;</button>
+        <span class="pill sim">Illustrative data — modelled on the Melbourne price cycle</span>
+        <span class="pill">Scope: Customer (Motorist)</span>
+        <button class="theme-toggle" id="themeToggle" title="Toggle dark mode" aria-label="Toggle dark mode">&#127769;</button>
       </div>
-    </div>
-
-    <!-- live fuel-price ticker -->
-    <div class="ticker">
-      <div class="track" id="tickerTrack"></div>
     </div>
 
     <div class="content">
 
-      <!-- hero -->
+      <!-- ============ hero ============ -->
       <div class="hero reveal">
         <h2>Smarter fuel buying for Victorian motorists</h2>
-        <p>An analysis of Service Victoria's fuel-price feature — from the daily price-cap mechanism to a proposed <b>Price Drop Alerts</b> improvement that surfaces the cycle low the moment it happens.</p>
-        <div class="hero-stats">
-          <div class="hs"><div class="n" data-count="333" data-prefix="$" data-suffix="/yr">$0</div><div class="l">Potential annual saving</div></div>
-          <div class="hs"><div class="n" data-count="100" data-suffix="+">0</div><div class="l">Services on the platform</div></div>
-          <div class="hs"><div class="n" data-count="5" data-suffix=" new">0</div><div class="l">Proposed use cases</div></div>
+        <p>An analysis of Service Victoria's fuel-price feature — from the daily price-cap mechanism to a proposed <b>Price Drop Alerts</b> improvement that surfaces the cycle low the moment it happens. Explore the cycle, simulate an alert, and see the UML models behind the proposal.</p>
+        <div class="figure">
+          <span class="big" id="heroFig">$0</span>
+          <span class="cap">potential annual saving per motorist buying at the cycle low instead of the high (ACCC, 2024)</span>
         </div>
       </div>
 
+      <!-- ============ 01 overview ============ -->
       <section id="overview" class="reveal">
         <div class="section-head">
           <h2><span class="num">01</span> Overview</h2>
           <div class="desc">Key figures behind the business case for fuel-price transparency in Victoria.</div>
         </div>
-        <div class="kpi-grid">
-          <div class="kpi-card blue">
-            <div class="top-row"><div class="ico">&#128176;</div><span class="trend up">&#9650; 4.4%</span></div>
-            <div class="value" data-count="58.7" data-prefix="$" data-suffix="B" data-decimals="1">$0</div>
+        <div class="tile-grid">
+          <div class="tile">
             <div class="label">AU fuel-retailing revenue, 2024–25</div>
+            <div class="value" data-count="58.7" data-prefix="$" data-suffix="B" data-decimals="1">$0</div>
+            <div class="delta"><span class="up">▲ 4.4%</span> 5-yr annualised growth</div>
+            <div class="spark" data-spark="46,47.5,48.2,50.1,49.4,51.8,53,54.6,55.1,56.4,57.8,58.7"></div>
             <div class="src">IBISWorld (2025)</div>
           </div>
-          <div class="kpi-card green">
-            <div class="top-row"><div class="ico">&#128200;</div><span class="trend up">5-yr CAGR</span></div>
-            <div class="value" data-count="4.4" data-suffix="%" data-decimals="1">0%</div>
-            <div class="label">5-yr annualised industry growth</div>
-            <div class="src">IBISWorld (2025)</div>
-          </div>
-          <div class="kpi-card orange">
-            <div class="top-row"><div class="ico">&#9981;</div><span class="trend up">per motorist</span></div>
-            <div class="value" data-count="333" data-prefix="≈ $" data-suffix=" /yr">≈ $0</div>
-            <div class="label">Saving buying at cycle low</div>
+          <div class="tile">
+            <div class="label">Saving buying at the cycle low</div>
+            <div class="value" data-count="333" data-prefix="≈ $" data-suffix="/yr">≈ $0</div>
+            <div class="delta">per typical Melbourne motorist</div>
             <div class="src">ACCC (2024)</div>
           </div>
-          <div class="kpi-card amber">
-            <div class="top-row"><div class="ico">&#9888;</div><span class="trend flat">compliance</span></div>
-            <div class="value" data-count="3000" data-prefix="$" data-suffix="+">$0</div>
+          <div class="tile">
             <div class="label">Penalty per reporting breach</div>
+            <div class="value" data-count="3000" data-prefix="$" data-suffix="+">$0</div>
+            <div class="delta">real-time reporting is mandatory</div>
             <div class="src">Consumer Affairs Victoria (2025)</div>
           </div>
-          <div class="kpi-card blue">
-            <div class="top-row"><div class="ico">&#127968;</div><span class="trend flat">platform</span></div>
-            <div class="value" data-count="100" data-suffix="+">0+</div>
+          <div class="tile">
             <div class="label">Services on Service Victoria</div>
+            <div class="value" data-count="100" data-suffix="+">0</div>
+            <div class="delta">single trusted sign-in inherited</div>
             <div class="src">Service Victoria (2025)</div>
           </div>
-          <div class="kpi-card green">
-            <div class="top-row"><div class="ico">&#128197;</div><span class="trend up">launched</span></div>
+          <div class="tile">
+            <div class="label">Servo Saver launched</div>
             <div class="value">Oct 2025</div>
-            <div class="label">Servo Saver launch date</div>
+            <div class="delta">consumer face of the Fair Fuel Plan</div>
             <div class="src">Premier of Victoria (2025)</div>
+          </div>
+          <div class="tile">
+            <div class="label">Proposed new use cases</div>
+            <div class="value" data-count="5" data-suffix="">0</div>
+            <div class="delta">added purely additively — no legacy class changes</div>
+            <div class="src">This analysis</div>
           </div>
         </div>
       </section>
 
-      <section id="business-case" class="reveal">
+      <!-- ============ 02 price explorer ============ -->
+      <section id="explorer" class="reveal">
         <div class="section-head">
-          <h2><span class="num">02</span> Business Case</h2>
-          <div class="desc">Daily price-cap mechanism and the value of timing a fuel purchase correctly.</div>
+          <h2><span class="num">02</span> Price Cycle Explorer</h2>
+          <div class="desc">Fourteen days of the Melbourne price cycle — a sharp restoration jump, then a slow decay to the low. The fuel filter scopes everything in this section.</div>
         </div>
+
+        <div class="filter-row">
+          <span class="flabel">Fuel type</span>
+          <div class="seg" id="fuelSeg" role="group" aria-label="Fuel type">
+            <button data-fuel="u91" class="active">Unleaded 91</button>
+            <button data-fuel="p95">Premium 95</button>
+            <button data-fuel="diesel">Diesel</button>
+          </div>
+        </div>
+
         <div class="grid-2">
           <div class="panel">
-            <h3>&#9201; Daily price-cap cycle</h3>
-            <div class="chart-wrap"><canvas id="capCycleChart"></canvas></div>
+            <div class="chart-head">
+              <div>
+                <h3 id="cycleTitle">U91 — price by brand, last 14 days (¢/L)</h3>
+                <p class="sub">Hover for the full readout · click a legend key to toggle a brand</p>
+              </div>
+              <button class="table-toggle" id="cycleTableBtn" aria-pressed="false">Table view</button>
+            </div>
+            <div class="legend" id="cycleLegend"></div>
+            <div class="chart-wrap" id="cycleChart"></div>
+            <div id="cycleTable" hidden style="overflow-x:auto;"></div>
           </div>
+
           <div class="panel">
-            <h3>&#129518; Interactive savings calculator</h3>
+            <div class="chart-head">
+              <div>
+                <h3>Nearby stations — today</h3>
+                <p class="sub" id="stationSub">Cheapest U91 within 10 km · click a column to sort</p>
+              </div>
+            </div>
+            <div style="overflow-x:auto;">
+              <table id="stationTable" aria-label="Nearby stations">
+                <thead>
+                  <tr>
+                    <th class="sortable" data-key="name">Station <span class="dir"></span></th>
+                    <th class="sortable num-cell" data-key="dist">Km <span class="dir"></span></th>
+                    <th class="sortable num-cell" data-key="price">¢/L <span class="dir"></span></th>
+                    <th>Vs cap</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 03 calculator ============ -->
+      <section id="calculator" class="reveal">
+        <div class="section-head">
+          <h2><span class="num">03</span> Savings Calculator</h2>
+          <div class="desc">What perfectly timing the cycle is worth for your driving pattern. The high–low gap follows the fuel selected above.</div>
+        </div>
+        <div class="grid-2e">
+          <div class="panel">
+            <h3>Your numbers</h3>
+            <p class="sub">Assumes ~70% of the tank refilled each fill-up.</p>
             <div class="calc-row">
               <div class="calc-field">
-                <label>Weekly fill-ups <b id="fillsVal">2</b></label>
+                <label>Fill-ups per week <b id="fillsVal">2</b></label>
                 <input type="range" id="fills" min="1" max="7" value="2">
               </div>
               <div class="calc-field">
-                <label>Tank size (L) <b id="tankVal">55 L</b></label>
+                <label>Tank size <b id="tankVal">55 L</b></label>
                 <input type="range" id="tank" min="30" max="90" value="55">
               </div>
               <div class="calc-field">
-                <label>High–low gap (¢/L) <b id="gapVal">25¢</b></label>
+                <label>High–low gap <b id="gapVal">25¢/L</b></label>
                 <input type="range" id="gap" min="5" max="45" value="25">
               </div>
             </div>
             <div class="calc-result">
               <span class="big" id="calcOut">$0</span>
-              <span class="cap">estimated saved per year by always buying at the cycle low instead of the high.<br>Benchmark: ACCC ≈ $333/yr for a typical motorist.</span>
+              <span class="cap">saved per year by always buying at the cycle low instead of the high</span>
             </div>
+          </div>
+          <div class="panel">
+            <h3>Against the benchmark</h3>
+            <p class="sub">ACCC (2024) puts the typical Melbourne motorist's opportunity at ≈ $333/yr.</p>
+            <div class="cmp-bars" id="cmpBars"></div>
+            <p style="font-size:0.76rem; color:var(--muted); line-height:1.5; margin-bottom:0;" id="cmpNote"></p>
           </div>
         </div>
       </section>
 
+      <!-- ============ 04 alerts ============ -->
+      <section id="alerts" class="reveal">
+        <div class="section-head">
+          <h2><span class="num">04</span> Proposed Improvement — Price Drop Alerts</h2>
+          <div class="desc">Registered holders set a fuel type, target price, radius and quiet hours; the system pushes a notification when a nearby station drops to target. Simulate it against the last 14 days.</div>
+        </div>
+        <div class="grid-2">
+          <div class="panel">
+            <div class="chart-head">
+              <div>
+                <h3>Alert simulator — cheapest nearby price vs your target</h3>
+                <p class="sub">Drag the target. Dots mark the days your alert would have fired.</p>
+              </div>
+              <button class="table-toggle" id="alertTableBtn" aria-pressed="false">Table view</button>
+            </div>
+            <div class="calc-field" style="max-width:340px; margin-bottom:0.8rem;">
+              <label>Target price <b id="threshVal">—</b></label>
+              <input type="range" id="thresh" min="0" max="100" value="35">
+            </div>
+            <div class="chart-wrap" id="alertChart"></div>
+            <div id="alertTable" hidden style="overflow-x:auto;"></div>
+          </div>
+          <div class="panel">
+            <h3>Notifications this fortnight</h3>
+            <p class="sub">What the motorist would have received — no app-checking required.</p>
+            <div class="alert-stats">
+              <div class="as"><div class="v" id="alertCount">0</div><div class="l">alerts fired</div></div>
+              <div class="as"><div class="v" id="alertBest">—</div><div class="l">best price caught</div></div>
+              <div class="as"><div class="v" id="alertSaved">—</div><div class="l">vs fortnight high</div></div>
+            </div>
+            <ul class="notif-list" id="notifList"></ul>
+            <p style="font-size:0.75rem; color:var(--muted); line-height:1.55; margin:0.8rem 0 0;"><b style="color:var(--ink)">Why it works:</b> opt-in push at the moment value is highest (~3× retention — Airship 2024) · surfaces the ACCC's ≈$333/yr cycle low as it happens · steers demand to competitive stations (Premier of Victoria, 2025) · reuses existing location, price, cap and account components. <b style="color:var(--ink)">Trade-offs managed:</b> quiet hours, 10-alert cap, security review before build.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 05 activity ============ -->
       <section id="activity" class="reveal">
         <div class="section-head">
-          <h2><span class="num">03</span> Activity Diagram — Searching for Nearby Fuel</h2>
+          <h2><span class="num">05</span> Activity Flow — Searching for Nearby Fuel</h2>
           <div class="desc">UC1, the motorist's core journey: location detection, a parallel price/cap fetch, and graceful handling of empty results.</div>
         </div>
         <div class="panel">
           <div class="stepper">
             <div class="step"><span class="tag">Start</span>Open app → tap "Servo Saver"</div>
-            <div class="arrow-sep">&#8594;</div>
+            <div class="arrow-sep">→</div>
             <div class="step decision"><span class="tag">Decision</span>GPS permission?<br><small>granted → coords · denied → manual suburb</small></div>
-            <div class="arrow-sep">&#8594;</div>
+            <div class="arrow-sep">→</div>
             <div class="step parallel"><span class="tag">Fork ‖ Join</span>Query prices ‖ retrieve daily caps <small>(parallel)</small></div>
-            <div class="arrow-sep">&#8594;</div>
+            <div class="arrow-sep">→</div>
             <div class="step decision"><span class="tag">Decision</span>Stations found?<br><small>yes → render map · no → widen search</small></div>
-            <div class="arrow-sep">&#8594;</div>
+            <div class="arrow-sep">→</div>
             <div class="step"><span class="tag">End</span>View prices → select station → details</div>
           </div>
         </div>
       </section>
 
+      <!-- ============ 06 use cases ============ -->
       <section id="usecase" class="reveal">
         <div class="section-head">
-          <h2><span class="num">04</span> Use Cases</h2>
-          <div class="desc">Overall service map and the expanded flow/exceptions for UC1.</div>
+          <h2><span class="num">06</span> Use Cases</h2>
+          <div class="desc">Relationship types across the service map, and the expanded exception flows for UC1.</div>
         </div>
-        <div class="grid-2">
+        <div class="grid-2e">
           <div class="panel">
-            <h3>&#128279; Use case relationships</h3>
+            <h3>Use case relationships</h3>
+            <p class="sub">Notably, no legacy use case has the system contact the motorist first — the gap Price Drop Alerts fills.</p>
             <table>
               <thead><tr><th>Relationship</th><th>Meaning</th><th>Examples</th></tr></thead>
               <tbody>
-                <tr><td><span class="badge include">«include»</span></td><td>Mandatory sub-step</td><td>Detect location, Retrieve prices, Display results</td></tr>
-                <tr><td><span class="badge extend">«extend»</span></td><td>Optional enhancement</td><td>Manual entry, Filter, Sort, View price cap</td></tr>
+                <tr><td><span class="badge include">«include»</span></td><td>Mandatory sub-step</td><td>Detect location · Retrieve prices · Display results</td></tr>
+                <tr><td><span class="badge extend">«extend»</span></td><td>Optional enhancement</td><td>Manual entry · Filter · Sort · View price cap</td></tr>
                 <tr><td><span class="badge">generalisation</span></td><td>Specialised actor</td><td>Registered SV Account Holder ← User (Motorist)</td></tr>
+                <tr><td><span class="badge new">new</span></td><td>Proposed improvement</td><td>Set / edit / pause alert · Receive notification · Manage quiet hours</td></tr>
               </tbody>
             </table>
-            <h3 style="margin-top:1.2rem;">&#9888; Exception conditions — UC1</h3>
+          </div>
+          <div class="panel">
+            <h3>Exception conditions — UC1</h3>
+            <p class="sub">Every failure path resolves to a usable state, never a dead end.</p>
             <ul class="ex-list">
               <li><span class="code">1.2</span> GPS not granted → manual-entry prompt, geocode, resume at 2.3.</li>
               <li><span class="code">2.1</span> Location Services failure → fall back to manual entry.</li>
               <li><span class="code">2.3</span> Price database unreachable → service-unavailable message + retry.</li>
-              <li><span class="code">2.4</span> No stations found → empty state, widen search.</li>
+              <li><span class="code">2.4</span> No stations found → empty state, widen search radius.</li>
               <li><span class="code">4.1</span> Station details fail to load → cached details + warning.</li>
             </ul>
-          </div>
-          <div class="panel">
-            <h3>&#128202; Service mix — legacy vs. improvement</h3>
-            <div class="chart-wrap"><canvas id="useCaseChart"></canvas></div>
           </div>
         </div>
       </section>
 
+      <!-- ============ 07 class & CRC ============ -->
       <section id="class" class="reveal">
         <div class="section-head">
-          <h2><span class="num">05</span> Class Diagram &amp; CRC Cards</h2>
+          <h2><span class="num">07</span> Class Diagram &amp; CRC Cards</h2>
           <div class="desc">FuelStation and FuelPrice anchor the legacy structure; PriceAlert and AlertNotification extend it without altering any existing class.</div>
         </div>
         <div class="class-grid">
@@ -620,9 +694,9 @@
             <div class="head">FuelStation <span class="badge">core</span></div>
             <div class="body">
               <b>Attributes:</b> stationId, name, brand, openingHours, address, isOperating<br><br>
-              <b>Composes:</b> FuelPrice (1→0..*), DailyPriceCap (1→0..*)<br>
+              <b>Composes:</b> FuelPrice (1 → 0..*), DailyPriceCap (1 → 0..*)<br>
               <b>Aggregated by:</b> FuelRetailer<br><br>
-              <b>Rule:</b> at most one active FuelPrice per FuelType.
+              <b>Rule:</b> at most one Active FuelPrice per FuelType.
             </div>
           </div>
           <div class="class-box">
@@ -640,7 +714,7 @@
               <b>Attributes:</b> alertId, fuelCode, thresholdPrice, radiusKm, quietHours, status<br><br>
               <b>Belongs to:</b> RegisteredAccountHolder<br>
               <b>Matched against:</b> FuelPrice<br><br>
-              <b>Rule:</b> fires only when Active price ≤ threshold, outside quiet hours.
+              <b>Rule:</b> fires only when an Active price ≤ threshold, outside quiet hours.
             </div>
           </div>
           <div class="class-box highlight">
@@ -654,106 +728,116 @@
         </div>
       </section>
 
+      <!-- ============ 08 state machine ============ -->
       <section id="state" class="reveal">
         <div class="section-head">
-          <h2><span class="num">06</span> State Machine — the FuelPrice Object</h2>
-          <div class="desc">Full lifecycle of a single FuelPrice, from submission to destruction.</div>
+          <h2><span class="num">08</span> State Machine — the FuelPrice Object</h2>
+          <div class="desc">The full lifecycle of one FuelPrice, from submission to destruction. Click a state to inspect it.</div>
         </div>
         <div class="panel">
-          <div class="lifecycle">
-            <span class="life-state">● Start</span><span class="life-arrow">&#8594;</span>
-            <span class="life-state">Submitted</span><span class="life-arrow">&#8594;</span>
-            <span class="life-state">Validating <small>(format ‖ cap)</small></span><span class="life-arrow">&#8594;</span>
-            <span class="life-state">Live <small>(Active ⇄ Stale)</small></span><span class="life-arrow">&#8594;</span>
-            <span class="life-state">Archived</span><span class="life-arrow">&#8594;</span>
-            <span class="life-state terminal">◎ Final (7yr retention)</span>
+          <div class="lifecycle" id="lifecycle">
+            <button class="life-state" data-state="submitted">● Submitted</button><span class="life-arrow">→</span>
+            <button class="life-state" data-state="validating">Validating</button><span class="life-arrow">→</span>
+            <button class="life-state sel" data-state="live">Live (Active ⇄ Stale)</button><span class="life-arrow">→</span>
+            <button class="life-state" data-state="archived">Archived</button><span class="life-arrow">→</span>
+            <button class="life-state terminal" data-state="final">◎ Destroyed</button>
           </div>
-          <p style="font-size:0.8rem; color:var(--muted); margin-top:1rem; margin-bottom:0;">A <b style="color:var(--text)">terminate</b> marker purges a price immediately if its station is deregistered. The moment a price becomes <b style="color:var(--accent)">Active</b> is the exact event Price Drop Alerts listens for.</p>
+          <div class="state-detail" id="stateDetail"></div>
         </div>
       </section>
 
+      <!-- ============ 09 UI eval ============ -->
       <section id="ui" class="reveal">
         <div class="section-head">
-          <h2><span class="num">07</span> User Interface Evaluation</h2>
+          <h2><span class="num">09</span> User Interface Evaluation</h2>
           <div class="desc">Hands-on assessment of the live app's map view, list view, fuel-type selector and brand filter.</div>
         </div>
         <div class="score-grid">
           <div class="score-card good">
             <div class="sh">
               <div class="gauge">
-                <svg width="56" height="56"><circle class="ring-bg" cx="28" cy="28" r="24" fill="none" stroke-width="6"/><circle class="ring" cx="28" cy="28" r="24" fill="none" stroke-width="6" stroke-linecap="round" data-pct="40"/></svg>
+                <svg width="54" height="54"><circle class="ring-bg" cx="27" cy="27" r="23" fill="none" stroke-width="5"/><circle class="ring" cx="27" cy="27" r="23" fill="none" stroke-width="5" stroke-linecap="round" data-pct="40"/></svg>
                 <span class="num">4</span>
               </div>
-              <span class="label">Good <small>strengths that work</small></span>
+              <span class="label">✓ Good <small>strengths that work</small></span>
             </div>
             <ul>
-              <li>Map-first, colour-coded pins with "Lowest" badge</li>
-              <li>"Tomorrow's price cap" panel</li>
-              <li>Comprehensive filters / sort</li>
-              <li>Inherits SV trust &amp; single sign-in</li>
+              <li>Map-first, colour-coded pins with a "Lowest" badge</li>
+              <li>"Tomorrow's price cap" panel for fill-now-or-wait</li>
+              <li>Comprehensive filters and sort</li>
+              <li>Inherits Service Victoria trust and single sign-in</li>
             </ul>
           </div>
-          <div class="score-card bad">
+          <div class="score-card warn">
             <div class="sh">
               <div class="gauge">
-                <svg width="56" height="56"><circle class="ring-bg" cx="28" cy="28" r="24" fill="none" stroke-width="6"/><circle class="ring" cx="28" cy="28" r="24" fill="none" stroke-width="6" stroke-linecap="round" data-pct="40"/></svg>
+                <svg width="54" height="54"><circle class="ring-bg" cx="27" cy="27" r="23" fill="none" stroke-width="5"/><circle class="ring" cx="27" cy="27" r="23" fill="none" stroke-width="5" stroke-linecap="round" data-pct="40"/></svg>
                 <span class="num">4</span>
               </div>
-              <span class="label">Needs work <small>gaps to close</small></span>
+              <span class="label">⚠ Needs work <small>gaps to close</small></span>
             </div>
             <ul>
-              <li>Entirely pull-based, no proactive alerts</li>
+              <li>Entirely pull-based — no proactive alerts</li>
               <li>No save / watchlist capability</li>
-              <li>App-wide timestamp, not per-station</li>
+              <li>App-wide timestamp, not per-station freshness</li>
               <li>Sort options not combinable</li>
             </ul>
           </div>
-          <div class="score-card ugly">
+          <div class="score-card crit">
             <div class="sh">
               <div class="gauge">
-                <svg width="56" height="56"><circle class="ring-bg" cx="28" cy="28" r="24" fill="none" stroke-width="6"/><circle class="ring" cx="28" cy="28" r="24" fill="none" stroke-width="6" stroke-linecap="round" data-pct="20"/></svg>
+                <svg width="54" height="54"><circle class="ring-bg" cx="27" cy="27" r="23" fill="none" stroke-width="5"/><circle class="ring" cx="27" cy="27" r="23" fill="none" stroke-width="5" stroke-linecap="round" data-pct="20"/></svg>
                 <span class="num">2</span>
               </div>
-              <span class="label">Defects <small>reads as broken</small></span>
+              <span class="label">✕ Defects <small>reads as broken</small></span>
             </div>
             <ul>
               <li>"Opening hours not available" reads as broken</li>
-              <li>Inconsistent brand-filter logos</li>
+              <li>Inconsistent brand-filter logos (grey placeholders)</li>
             </ul>
           </div>
         </div>
       </section>
 
-      <section id="improvement" class="reveal">
+      <!-- ============ 10 diagram gallery ============ -->
+      <section id="diagrams" class="reveal">
         <div class="section-head">
-          <h2><span class="num">08</span> Proposed Improvement — Price Drop Alerts</h2>
-          <div class="desc">Registered holders set fuel type, target price, radius and quiet hours; the system notifies them when a nearby station drops to target — reusing existing location, cap and account components.</div>
+          <h2><span class="num">10</span> Diagram Gallery</h2>
+          <div class="desc">The UML models behind this dashboard. Click any diagram to view it full size.</div>
         </div>
-        <div class="grid-2">
-          <div class="panel">
-            <h3>&#128293; Value drivers</h3>
-            <div class="chart-wrap"><canvas id="valueChart"></canvas></div>
-          </div>
-          <div class="panel">
-            <h3>&#9989; Why it works</h3>
-            <table>
-              <thead><tr><th>Driver</th><th>Mechanism</th><th>Evidence</th></tr></thead>
-              <tbody>
-                <tr><td>Engagement</td><td>Push alerts at the moment value is highest</td><td>Airship (2024), ~3× retention</td></tr>
-                <tr><td>Savings</td><td>Surfaces the cycle low as it happens</td><td>ACCC (2024), ≈$333/yr</td></tr>
-                <tr><td>Policy fit</td><td>Steers demand to competitive stations</td><td>Premier of Victoria (2025)</td></tr>
-                <tr><td>Low risk</td><td>Reuses location, price, cap, account</td><td>This report</td></tr>
-              </tbody>
-            </table>
-            <p style="font-size:0.78rem; color:var(--muted); margin-top:0.9rem; margin-bottom:0;"><b style="color:var(--text)">Trade-offs managed:</b> notification fatigue (opt-in, quiet hours, 10-alert cap) · retailer perspective (rewards competitive pricing) · privacy (security review required before build).</p>
-          </div>
+        <div class="gallery">
+          <button class="thumb" data-img="diagrams/activity-diagram.png" data-cap="Activity diagram — UC1, searching for nearby fuel">
+            <span class="imgbox"><img src="diagrams/activity-diagram.png" alt="Activity diagram" loading="lazy"></span>
+            <span class="cap">Activity diagram<small>UC1 — searching for nearby fuel</small></span>
+          </button>
+          <button class="thumb" data-img="diagrams/use-case-legacy.png" data-cap="Use case diagram — legacy system">
+            <span class="imgbox"><img src="diagrams/use-case-legacy.png" alt="Legacy use case diagram" loading="lazy"></span>
+            <span class="cap">Use case — legacy<small>every service by actor</small></span>
+          </button>
+          <button class="thumb" data-img="diagrams/use-case-improved.png" data-cap="Use case diagram — with Price Drop Alerts">
+            <span class="imgbox"><img src="diagrams/use-case-improved.png" alt="Improved use case diagram" loading="lazy"></span>
+            <span class="cap">Use case — improved<small>with Price Drop Alerts</small></span>
+          </button>
+          <button class="thumb" data-img="diagrams/class-diagram-legacy.png" data-cap="Class diagram — legacy structure">
+            <span class="imgbox"><img src="diagrams/class-diagram-legacy.png" alt="Legacy class diagram" loading="lazy"></span>
+            <span class="cap">Class diagram — legacy<small>FuelStation, FuelPrice, caps</small></span>
+          </button>
+          <button class="thumb" data-img="diagrams/class-diagram-improved.png" data-cap="Class diagram — with PriceAlert and AlertNotification">
+            <span class="imgbox"><img src="diagrams/class-diagram-improved.png" alt="Improved class diagram" loading="lazy"></span>
+            <span class="cap">Class diagram — improved<small>PriceAlert, AlertNotification</small></span>
+          </button>
+          <button class="thumb" data-img="diagrams/state-machine.png" data-cap="State machine — the FuelPrice lifecycle">
+            <span class="imgbox"><img src="diagrams/state-machine.png" alt="State machine diagram" loading="lazy"></span>
+            <span class="cap">State machine<small>FuelPrice lifecycle</small></span>
+          </button>
         </div>
       </section>
 
+      <!-- ============ 11 documents ============ -->
       <section id="documents" class="reveal">
         <div class="section-head">
-          <h2><span class="num">09</span> Source Documents</h2>
-          <div class="desc">Every diagram and the full report behind this dashboard.</div>
+          <h2><span class="num">11</span> Source Documents</h2>
+          <div class="desc">Every diagram PDF and the full report behind this dashboard.</div>
         </div>
         <div class="doc-grid">
           <a class="doc-card" href="Servo%20Saver%20Individual%20Project%20Report.pdf"><span class="dico">&#128214;</span><div><div class="title">Full Project Report</div><div class="desc">Complete write-up (PDF)</div></div></a>
@@ -771,184 +855,643 @@
       </section>
 
       <footer>
-        Servo Saver — Product Analysis · An individual project by Ramkrushna Bhadekar · See <a href="README.md">README.md</a> for the full write-up.
+        Servo Saver — Product Analysis · An individual project by Ramkrushna Bhadekar · See <a href="README.md">README.md</a> for the full write-up.<br>
+        Chart data is illustrative, modelled on the Melbourne fuel price cycle; the figures in Overview are sourced as cited.
       </footer>
 
     </div>
   </div>
 </div>
 
-<button id="toTop" title="Back to top">&#8593;</button>
+<button id="toTop" title="Back to top" aria-label="Back to top">↑</button>
+<div class="lightbox" id="lightbox" role="dialog" aria-label="Diagram viewer">
+  <img id="lbImg" src="" alt="">
+  <div class="lb-cap" id="lbCap"></div>
+</div>
 
 <script>
-  /* ---------- theme ---------- */
-  const root = document.documentElement;
-  const themeBtn = document.getElementById('themeToggle');
-  const setTheme = t => { root.setAttribute('data-theme', t); themeBtn.innerHTML = t === 'dark' ? '&#9728;' : '&#127769;'; localStorage.setItem('ss-theme', t); restyleCharts(t); };
-  themeBtn.addEventListener('click', () => setTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'));
+'use strict';
+/* ================= theme ================= */
+const root = document.documentElement;
+const themeBtn = document.getElementById('themeToggle');
+function setTheme(t) {
+  root.setAttribute('data-theme', t);
+  themeBtn.textContent = t === 'dark' ? '☀' : '🌙';
+  try { localStorage.setItem('ss-theme', t); } catch (e) {}
+  renderAll();
+}
+themeBtn.addEventListener('click', () => setTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'));
 
-  /* ---------- live clock ---------- */
-  const clock = document.getElementById('clock');
-  const tick = () => clock.textContent = new Date().toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-  tick(); setInterval(tick, 1000);
+function cssVar(name) { return getComputedStyle(root).getPropertyValue(name).trim(); }
 
-  /* ---------- live fuel-price ticker ---------- */
-  const brands = [
-    ['7-Eleven', 178.9], ['BP', 184.5], ['Shell', 182.1], ['Ampol', 181.7],
-    ['United', 176.3], ['Coles Express', 183.4], ['Costco', 169.9], ['Metro', 177.5], ['Liberty', 179.8]
-  ];
-  const track = document.getElementById('tickerTrack');
-  function buildTicker() {
-    const make = () => brands.map(([b, base]) => {
-      const delta = (Math.random() * 6 - 3);
-      const price = (base + delta).toFixed(1);
-      const dir = delta >= 0 ? 'up' : 'down';
-      const arr = delta >= 0 ? '&#9650;' : '&#9660;';
-      return `<span class="item"><span class="brand-name">${b}</span> <span class="price">${price}¢</span> <span class="${dir}">${arr} ${Math.abs(delta).toFixed(1)}</span></span>`;
-    }).join('');
-    track.innerHTML = `<span class="item"><span class="label">⛽ U91 LIVE</span></span>` + make() + `<span class="item"><span class="label">⛽ U91 LIVE</span></span>` + make();
+/* ================= seeded data model ================= */
+function mulberry32(seed) {
+  return function () {
+    seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+const DAYS = 14;
+const dayLabels = [];
+{
+  const now = new Date();
+  for (let i = DAYS - 1; i >= 0; i--) {
+    const d = new Date(now); d.setDate(now.getDate() - i);
+    dayLabels.push(d.toLocaleDateString('en-AU', { day: 'numeric', month: 'short' }));
   }
-  buildTicker();
-  setInterval(buildTicker, 9000);
+}
 
-  /* ---------- count-up animation ---------- */
-  function animateCount(el) {
-    const target = parseFloat(el.dataset.count);
-    const decimals = parseInt(el.dataset.decimals || '0');
-    const prefix = el.dataset.prefix || '';
-    const suffix = el.dataset.suffix || '';
-    const dur = 1100; const start = performance.now();
-    const step = now => {
-      const p = Math.min((now - start) / dur, 1);
-      const eased = 1 - Math.pow(1 - p, 3);
-      const val = (target * eased).toFixed(decimals);
-      el.textContent = prefix + Number(val).toLocaleString('en-AU', { minimumFractionDigits: decimals, maximumFractionDigits: decimals }) + suffix;
-      if (p < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  }
+/* Melbourne cycle: sharp restoration jump, then slow decay to the low. */
+const FUELS = {
+  u91:    { name: 'Unleaded 91', short: 'U91',    low: 165, high: 196, jumpDay: 4 },
+  p95:    { name: 'Premium 95',  short: 'P95',    low: 183, high: 212, jumpDay: 4 },
+  diesel: { name: 'Diesel',      short: 'Diesel', low: 176, high: 191, jumpDay: 4 }
+};
+/* Brand slots are fixed — color follows the entity, never rank. */
+const BRANDS = [
+  { id: 'seven',  name: '7-Eleven', slot: '--s1', offset: -1.5 },
+  { id: 'bp',     name: 'BP',       slot: '--s2', offset:  2.5 },
+  { id: 'shell',  name: 'Shell',    slot: '--s3', offset:  1.5 },
+  { id: 'united', name: 'United',   slot: '--s4', offset: -3.0 }
+];
 
-  /* ---------- gauges ---------- */
-  function animateGauge(circle) {
-    const r = 24, c = 2 * Math.PI * r;
-    const pct = parseFloat(circle.dataset.pct);
-    circle.style.strokeDasharray = c;
-    circle.style.strokeDashoffset = c;
-    circle.style.transition = 'stroke-dashoffset 1.1s ease';
-    requestAnimationFrame(() => circle.style.strokeDashoffset = c * (1 - pct / 100));
-  }
-
-  /* ---------- scroll reveal + trigger anims ---------- */
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('in');
-        e.target.querySelectorAll('[data-count]').forEach(animateCount);
-        e.target.querySelectorAll('.ring[data-pct]').forEach(animateGauge);
-        io.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.15 });
-  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-
-  /* ---------- savings calculator ---------- */
-  const fills = document.getElementById('fills'), tank = document.getElementById('tank'), gap = document.getElementById('gap');
-  const fillsVal = document.getElementById('fillsVal'), tankVal = document.getElementById('tankVal'), gapVal = document.getElementById('gapVal'), calcOut = document.getElementById('calcOut');
-  function calc() {
-    fillsVal.textContent = fills.value;
-    tankVal.textContent = tank.value + ' L';
-    gapVal.textContent = gap.value + '¢';
-    // saving = fills/wk * 52 * litres * gap(cents)/100 ... assume ~70% tank refilled
-    const litres = tank.value * 0.7;
-    const saving = (fills.value * 52 * litres * (gap.value / 100));
-    calcOut.textContent = '$' + Math.round(saving).toLocaleString('en-AU');
-  }
-  [fills, tank, gap].forEach(s => s.addEventListener('input', calc));
-  calc();
-
-  /* ---------- scroll progress + back to top + active nav ---------- */
-  const progress = document.getElementById('progress');
-  const toTop = document.getElementById('toTop');
-  const links = document.querySelectorAll('.sidebar nav a');
-  const sections = [...links].map(l => document.querySelector(l.getAttribute('href')));
-  window.addEventListener('scroll', () => {
-    const h = document.documentElement;
-    const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight);
-    progress.style.width = (scrolled * 100) + '%';
-    toTop.classList.toggle('show', h.scrollTop > 400);
-    let idx = 0;
-    sections.forEach((s, i) => { if (s && window.scrollY >= s.offsetTop - 120) idx = i; });
-    links.forEach(l => l.classList.remove('active'));
-    if (links[idx]) links[idx].classList.add('active');
+function genCycle(fuelKey) {
+  const f = FUELS[fuelKey];
+  const rng = mulberry32(fuelKey.length * 1000 + f.low);
+  return BRANDS.map((b, bi) => {
+    const jump = f.jumpDay + (bi % 2);         // brands restore a day apart
+    const data = [];
+    for (let d = 0; d < DAYS; d++) {
+      const sinceJump = (d - jump + DAYS * 2) % DAYS;
+      const decay = sinceJump / (DAYS - 1);
+      let price = f.high - (f.high - f.low) * decay + b.offset + (rng() * 2 - 1);
+      data.push(Math.round(price * 10) / 10);
+    }
+    return { ...b, data };
   });
-  toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+}
 
-  /* ---------- charts ---------- */
-  Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
-  const charts = [];
-
-  function gridColor() { return getComputedStyle(root).getPropertyValue('--chart-grid').trim(); }
-  function mutedColor() { return getComputedStyle(root).getPropertyValue('--muted').trim(); }
-
-  charts.push(new Chart(document.getElementById('capCycleChart'), {
-    type: 'line',
-    data: {
-      labels: ['12am', '6am', '2pm submit', '4pm publish', '6am (cap locks)', '+24h'],
-      datasets: [{
-        label: 'Cap status', data: [0, 0, 0.4, 0.8, 1, 1],
-        borderColor: '#1f5eff',
-        backgroundColor: ctx => {
-          const {ctx: c, chartArea} = ctx.chart; if (!chartArea) return 'rgba(31,94,255,0.1)';
-          const g = c.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
-          g.addColorStop(0, 'rgba(31,94,255,0.35)'); g.addColorStop(1, 'rgba(31,94,255,0)'); return g;
-        },
-        fill: true, tension: 0.35, pointRadius: 4, pointBackgroundColor: '#1f5eff', pointHoverRadius: 6
-      }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false, animation: { duration: 1200 },
-      plugins: { legend: { display: false } },
-      scales: { y: { display: false }, x: { grid: { display: false } } }
-    }
+const SUBURBS = ['Carlton', 'Brunswick', 'Richmond', 'Footscray', 'Preston', 'Essendon', 'Box Hill', 'St Kilda', 'Sunshine', 'Docklands'];
+function genStations(fuelKey, series) {
+  const rng = mulberry32(fuelKey.charCodeAt(0) * 7 + 42);
+  const extras = [
+    { name: 'Costco',        offset: -7.5 },
+    { name: 'Ampol',         offset:  1.8 },
+    { name: 'Liberty',       offset: -0.8 },
+    { name: 'Coles Express', offset:  1.2 },
+    { name: 'Metro',         offset: -0.3 },
+    { name: 'APCO',          offset: -1.9 }
+  ];
+  const today = series.map(s => s.data[DAYS - 1]);
+  const base = Math.min(...today) + 2;
+  const rows = [];
+  series.forEach((s, i) => rows.push({ name: s.name, brandSlot: s.slot, price: s.data[DAYS - 1] }));
+  extras.forEach(e => rows.push({ name: e.name, brandSlot: null, price: Math.round((base + e.offset + rng() * 2) * 10) / 10 }));
+  return rows.map((r, i) => ({
+    ...r,
+    suburb: SUBURBS[i % SUBURBS.length],
+    dist: Math.round((0.8 + rng() * 8.5) * 10) / 10,
+    cap: Math.round((r.price + 3 + rng() * 9) * 10) / 10
   }));
+}
 
-  charts.push(new Chart(document.getElementById('useCaseChart'), {
-    type: 'doughnut',
-    data: {
-      labels: ['Legacy — include', 'Legacy — extend', 'Improvement — new'],
-      datasets: [{ data: [3, 4, 5], backgroundColor: ['#1f5eff', '#e8a83c', '#ff7a45'], borderWidth: 0, hoverOffset: 10 }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false, cutout: '62%', animation: { animateRotate: true, duration: 1200 },
-      plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 11 } } } }
-    }
-  }));
+/* ================= state ================= */
+let fuel = 'u91';
+let series = genCycle(fuel);
+let stations = genStations(fuel, series);
+const hiddenBrands = new Set();
+let stationSort = { key: 'price', dir: 1 };
+let threshPct = 0.35; // slider position 0..1 across [low-2, high]
 
-  charts.push(new Chart(document.getElementById('valueChart'), {
-    type: 'bar',
-    data: {
-      labels: ['Engagement & retention', 'Motorist savings', 'Policy alignment', 'Low build cost/risk'],
-      datasets: [{ label: 'Relative impact', data: [5, 4, 4, 5], backgroundColor: ['#1f5eff','#1aa35c','#00c2a8','#ff7a45'], borderRadius: 6 }]
-    },
-    options: {
-      indexAxis: 'y', responsive: true, maintainAspectRatio: false, animation: { duration: 1200 },
-      plugins: { legend: { display: false } },
-      scales: { x: { beginAtZero: true, max: 5, grid: { color: gridColor() } }, y: { grid: { display: false } } }
-    }
-  }));
+/* ================= svg helpers ================= */
+const SVG = 'http://www.w3.org/2000/svg';
+function el(tag, attrs) {
+  const n = document.createElementNS(SVG, tag);
+  for (const k in attrs) n.setAttribute(k, attrs[k]);
+  return n;
+}
+function niceTicks(min, max, count) {
+  const span = max - min;
+  const step0 = span / Math.max(count - 1, 1);
+  const mag = Math.pow(10, Math.floor(Math.log10(step0)));
+  const step = [1, 2, 5, 10].map(m => m * mag).find(s => span / s <= count) || 10 * mag;
+  const lo = Math.floor(min / step) * step;
+  const ticks = [];
+  for (let v = lo; v <= max + step * 0.01; v += step) if (v >= min - step * 0.01) ticks.push(Math.round(v * 100) / 100);
+  return ticks;
+}
 
-  function restyleCharts() {
-    const g = gridColor(), m = mutedColor();
-    Chart.defaults.color = m; Chart.defaults.borderColor = g;
-    charts.forEach(ch => {
-      if (ch.options.scales) Object.values(ch.options.scales).forEach(sc => { if (sc.grid && sc.grid.color !== undefined) sc.grid.color = g; });
-      ch.update('none');
+/* ================= line chart (reusable) ================= */
+function lineChart(container, opts) {
+  container.textContent = '';
+  const W = Math.max(container.clientWidth || 560, 320);
+  const H = opts.height || 280;
+  const pad = { top: 14, right: 52, bottom: 26, left: 40 };
+  const iw = W - pad.left - pad.right, ih = H - pad.top - pad.bottom;
+
+  const visible = opts.series.filter(s => !s.hidden);
+  let vals = visible.flatMap(s => s.data);
+  if (opts.threshold != null) vals = vals.concat([opts.threshold]);
+  if (!vals.length) vals = [0, 1];
+  let min = Math.min(...vals), max = Math.max(...vals);
+  const padV = (max - min) * 0.12 || 2;
+  min -= padV; max += padV;
+
+  const x = i => pad.left + (iw * i) / (DAYS - 1);
+  const y = v => pad.top + ih - ((v - min) / (max - min)) * ih;
+
+  const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, width: W, height: H, role: 'img', 'aria-label': opts.label || 'line chart' });
+
+  const gridC = cssVar('--grid'), baseC = cssVar('--baseline'), mutedC = cssVar('--muted'), surfC = cssVar('--surface');
+
+  /* hairline grid + y ticks */
+  niceTicks(min, max, 5).forEach(t => {
+    svg.appendChild(el('line', { x1: pad.left, x2: W - pad.right, y1: y(t), y2: y(t), stroke: gridC, 'stroke-width': 1 }));
+    const lbl = el('text', { x: pad.left - 7, y: y(t) + 3, 'text-anchor': 'end', 'font-size': 10, fill: mutedC, style: 'font-variant-numeric: tabular-nums' });
+    lbl.textContent = t; svg.appendChild(lbl);
+  });
+  /* baseline */
+  svg.appendChild(el('line', { x1: pad.left, x2: W - pad.right, y1: pad.top + ih, y2: pad.top + ih, stroke: baseC, 'stroke-width': 1 }));
+  /* x labels every 2nd day */
+  dayLabels.forEach((d, i) => {
+    if (i % 2 !== 0) return;
+    const lbl = el('text', { x: x(i), y: H - 8, 'text-anchor': 'middle', 'font-size': 9.5, fill: mutedC });
+    lbl.textContent = d; svg.appendChild(lbl);
+  });
+
+  /* threshold line (semantic threshold — dashed is meaningful here) */
+  if (opts.threshold != null) {
+    const ty = y(opts.threshold);
+    svg.appendChild(el('line', { x1: pad.left, x2: W - pad.right, y1: ty, y2: ty, stroke: mutedC, 'stroke-width': 1.5, 'stroke-dasharray': '5 4' }));
+    const tl = el('text', { x: pad.left + 6, y: ty - 5, 'font-size': 9.5, fill: mutedC });
+    tl.textContent = 'target'; svg.appendChild(tl);
+  }
+
+  /* series lines */
+  visible.forEach(s => {
+    const color = cssVar(s.slot);
+    const dPath = s.data.map((v, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join('');
+    svg.appendChild(el('path', { d: dPath, fill: 'none', stroke: color, 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }));
+    /* end dot with 2px surface ring */
+    svg.appendChild(el('circle', { cx: x(DAYS - 1), cy: y(s.data[DAYS - 1]), r: 6, fill: surfC }));
+    svg.appendChild(el('circle', { cx: x(DAYS - 1), cy: y(s.data[DAYS - 1]), r: 4, fill: color }));
+  });
+
+  /* selective direct label: endpoint of the cheapest visible series only */
+  if (visible.length) {
+    const cheapest = visible.reduce((a, b) => (a.data[DAYS - 1] <= b.data[DAYS - 1] ? a : b));
+    const lbl = el('text', { x: x(DAYS - 1) + 9, y: y(cheapest.data[DAYS - 1]) + 3.5, 'font-size': 10.5, 'font-weight': 700, fill: cssVar('--ink') });
+    lbl.textContent = cheapest.data[DAYS - 1].toFixed(1);
+    svg.appendChild(lbl);
+  }
+
+  /* fired-alert markers */
+  if (opts.markers) {
+    opts.markers.forEach(m => {
+      svg.appendChild(el('circle', { cx: x(m.day), cy: y(m.value), r: 7, fill: surfC }));
+      svg.appendChild(el('circle', { cx: x(m.day), cy: y(m.value), r: 5, fill: cssVar('--good') }));
     });
   }
 
-  /* ---------- init theme ---------- */
-  setTheme(localStorage.getItem('ss-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
-</script>
+  /* crosshair + tooltip */
+  const cross = el('line', { y1: pad.top, y2: pad.top + ih, stroke: baseC, 'stroke-width': 1, opacity: 0 });
+  svg.appendChild(cross);
+  const hit = el('rect', { x: pad.left, y: pad.top, width: iw, height: ih, fill: 'transparent' });
+  svg.appendChild(hit);
 
+  const tip = document.createElement('div');
+  tip.className = 'viz-tip';
+  container.appendChild(tip);
+
+  function showTip(idx, clientX) {
+    cross.setAttribute('x1', x(idx)); cross.setAttribute('x2', x(idx));
+    cross.setAttribute('opacity', 1);
+    tip.textContent = '';
+    const dt = document.createElement('div'); dt.className = 'tdate'; dt.textContent = dayLabels[idx];
+    tip.appendChild(dt);
+    visible.forEach(s => {
+      const row = document.createElement('div'); row.className = 'trow';
+      const ln = document.createElement('span'); ln.className = 'ln'; ln.style.background = cssVar(s.slot);
+      const tn = document.createElement('span'); tn.className = 'tn'; tn.textContent = s.name;
+      const tv = document.createElement('span'); tv.className = 'tv'; tv.textContent = s.data[idx].toFixed(1) + '¢';
+      row.appendChild(ln); row.appendChild(tn); row.appendChild(tv);
+      tip.appendChild(row);
+    });
+    if (opts.threshold != null) {
+      const row = document.createElement('div'); row.className = 'trow';
+      const tn = document.createElement('span'); tn.className = 'tn'; tn.textContent = 'Your target';
+      const tv = document.createElement('span'); tv.className = 'tv'; tv.textContent = opts.threshold.toFixed(1) + '¢';
+      row.appendChild(tn); row.appendChild(tv);
+      tip.appendChild(row);
+    }
+    tip.style.opacity = 1;
+    const rect = container.getBoundingClientRect();
+    const px = (x(idx) / W) * rect.width;
+    const left = px > rect.width * 0.62 ? px - tip.offsetWidth - 14 : px + 14;
+    tip.style.left = left + 'px';
+    tip.style.top = '18px';
+  }
+  function hideTip() { tip.style.opacity = 0; cross.setAttribute('opacity', 0); }
+
+  hit.addEventListener('pointermove', e => {
+    const rect = svg.getBoundingClientRect();
+    const relX = ((e.clientX - rect.left) / rect.width) * W;
+    const idx = Math.max(0, Math.min(DAYS - 1, Math.round(((relX - pad.left) / iw) * (DAYS - 1))));
+    showTip(idx, e.clientX);
+  });
+  hit.addEventListener('pointerleave', hideTip);
+
+  container.appendChild(svg);
+}
+
+/* ================= sparklines (stat tiles) ================= */
+function renderSparks() {
+  document.querySelectorAll('[data-spark]').forEach(elm => {
+    const data = elm.dataset.spark.split(',').map(Number);
+    elm.textContent = '';
+    const W = elm.clientWidth || 160, H = 30;
+    const min = Math.min(...data), max = Math.max(...data);
+    const x = i => (W - 8) * i / (data.length - 1) + 2;
+    const y = v => 3 + (H - 8) * (1 - (v - min) / (max - min || 1));
+    const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, width: W, height: H, 'aria-hidden': 'true' });
+    const d = data.map((v, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join('');
+    svg.appendChild(el('path', { d, fill: 'none', stroke: cssVar('--seq-250'), 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }));
+    svg.appendChild(el('circle', { cx: x(data.length - 1), cy: y(data[data.length - 1]), r: 3.5, fill: cssVar('--s1') }));
+    elm.appendChild(svg);
+  });
+}
+
+/* ================= cycle section ================= */
+const cycleChartEl = document.getElementById('cycleChart');
+const cycleLegendEl = document.getElementById('cycleLegend');
+const cycleTableEl = document.getElementById('cycleTable');
+const cycleTableBtn = document.getElementById('cycleTableBtn');
+
+function renderCycleLegend() {
+  cycleLegendEl.textContent = '';
+  series.forEach(s => {
+    const b = document.createElement('button');
+    b.className = 'key' + (hiddenBrands.has(s.id) ? ' off' : '');
+    b.setAttribute('aria-pressed', String(!hiddenBrands.has(s.id)));
+    const ln = document.createElement('span'); ln.className = 'ln'; ln.style.background = cssVar(s.slot);
+    b.appendChild(ln); b.appendChild(document.createTextNode(s.name));
+    b.addEventListener('click', () => {
+      if (hiddenBrands.has(s.id)) hiddenBrands.delete(s.id);
+      else if (series.length - hiddenBrands.size > 1) hiddenBrands.add(s.id); // keep at least one visible
+      renderCycle();
+    });
+    cycleLegendEl.appendChild(b);
+  });
+}
+
+function renderCycleTable() {
+  cycleTableEl.textContent = '';
+  const t = document.createElement('table');
+  const thead = document.createElement('thead');
+  const hr = document.createElement('tr');
+  const th0 = document.createElement('th'); th0.textContent = 'Date'; hr.appendChild(th0);
+  series.forEach(s => { const th = document.createElement('th'); th.className = 'num-cell'; th.textContent = s.name; hr.appendChild(th); });
+  thead.appendChild(hr); t.appendChild(thead);
+  const tb = document.createElement('tbody');
+  for (let d = 0; d < DAYS; d++) {
+    const tr = document.createElement('tr');
+    const td0 = document.createElement('td'); td0.textContent = dayLabels[d]; tr.appendChild(td0);
+    series.forEach(s => { const td = document.createElement('td'); td.className = 'num-cell'; td.textContent = s.data[d].toFixed(1); tr.appendChild(td); });
+    tb.appendChild(tr);
+  }
+  t.appendChild(tb);
+  cycleTableEl.appendChild(t);
+}
+
+function renderCycle() {
+  renderCycleLegend();
+  const f = FUELS[fuel];
+  document.getElementById('cycleTitle').textContent = `${f.short} — price by brand, last 14 days (¢/L)`;
+  lineChart(cycleChartEl, {
+    series: series.map(s => ({ ...s, hidden: hiddenBrands.has(s.id) })),
+    label: `${f.name} price by brand over the last 14 days`
+  });
+  renderCycleTable();
+}
+
+cycleTableBtn.addEventListener('click', () => {
+  const showing = !cycleTableEl.hidden;
+  cycleTableEl.hidden = showing;
+  cycleChartEl.style.display = showing ? '' : 'none';
+  cycleLegendEl.style.display = showing ? '' : 'none';
+  cycleTableBtn.setAttribute('aria-pressed', String(!showing));
+  cycleTableBtn.textContent = showing ? 'Table view' : 'Chart view';
+});
+
+/* ================= station table ================= */
+const stationBody = document.querySelector('#stationTable tbody');
+function renderStations() {
+  document.getElementById('stationSub').textContent = `Cheapest ${FUELS[fuel].short} within 10 km · click a column to sort`;
+  const rows = [...stations].sort((a, b) => {
+    const k = stationSort.key;
+    const va = a[k], vb = b[k];
+    return (typeof va === 'string' ? va.localeCompare(vb) : va - vb) * stationSort.dir;
+  });
+  const lowest = Math.min(...stations.map(s => s.price));
+  stationBody.textContent = '';
+  rows.forEach(r => {
+    const tr = document.createElement('tr');
+
+    const td1 = document.createElement('td');
+    if (r.brandSlot) { const dot = document.createElement('span'); dot.className = 'brand-key'; dot.style.background = cssVar(r.brandSlot); td1.appendChild(dot); }
+    const nm = document.createElement('b'); nm.textContent = r.name; td1.appendChild(nm);
+    td1.appendChild(document.createTextNode(' · ' + r.suburb));
+    if (r.price === lowest) {
+      td1.appendChild(document.createTextNode(' '));
+      const bg = document.createElement('span'); bg.className = 'badge lowest'; bg.textContent = '✓ Lowest'; td1.appendChild(bg);
+    }
+    tr.appendChild(td1);
+
+    const td2 = document.createElement('td'); td2.className = 'num-cell'; td2.textContent = r.dist.toFixed(1); tr.appendChild(td2);
+    const td3 = document.createElement('td'); td3.className = 'num-cell'; const pb = document.createElement('b'); pb.textContent = r.price.toFixed(1); td3.appendChild(pb); tr.appendChild(td3);
+
+    const td4 = document.createElement('td'); td4.className = 'cap-cell';
+    const meter = document.createElement('span'); meter.className = 'cap-meter';
+    const fill = document.createElement('i'); fill.style.width = Math.min(100, (r.price / r.cap) * 100).toFixed(1) + '%';
+    meter.appendChild(fill); td4.appendChild(meter);
+    const diff = r.cap - r.price;
+    const dspan = document.createElement('span');
+    dspan.className = diff > 0.5 ? 'under-cap' : 'at-cap';
+    dspan.textContent = diff > 0.5 ? `−${diff.toFixed(1)}¢ under` : 'at cap';
+    td4.appendChild(dspan);
+    tr.appendChild(td4);
+    stationBody.appendChild(tr);
+  });
+  document.querySelectorAll('#stationTable th.sortable').forEach(th => {
+    th.querySelector('.dir').textContent = th.dataset.key === stationSort.key ? (stationSort.dir === 1 ? '▲' : '▼') : '';
+  });
+}
+document.querySelectorAll('#stationTable th.sortable').forEach(th => {
+  th.addEventListener('click', () => {
+    const k = th.dataset.key;
+    if (stationSort.key === k) stationSort.dir *= -1;
+    else stationSort = { key: k, dir: 1 };
+    renderStations();
+  });
+});
+
+/* ================= calculator ================= */
+const fills = document.getElementById('fills'), tank = document.getElementById('tank'), gap = document.getElementById('gap');
+const fillsVal = document.getElementById('fillsVal'), tankVal = document.getElementById('tankVal'), gapVal = document.getElementById('gapVal');
+const calcOut = document.getElementById('calcOut'), cmpBars = document.getElementById('cmpBars'), cmpNote = document.getElementById('cmpNote');
+const BENCH = 333;
+
+function calc() {
+  fillsVal.textContent = fills.value;
+  tankVal.textContent = tank.value + ' L';
+  gapVal.textContent = gap.value + '¢/L';
+  const litres = tank.value * 0.7;
+  const saving = Math.round(fills.value * 52 * litres * (gap.value / 100));
+  calcOut.textContent = '$' + saving.toLocaleString('en-AU');
+
+  const maxV = Math.max(saving, BENCH);
+  cmpBars.textContent = '';
+  [
+    { label: 'You', v: saving, slot: '--s1' },
+    { label: 'ACCC typical', v: BENCH, slot: '--seq-250' }
+  ].forEach(row => {
+    const div = document.createElement('div'); div.className = 'cmp-bar';
+    const bl = document.createElement('span'); bl.className = 'bl'; bl.textContent = row.label;
+    const track = document.createElement('div'); track.className = 'track';
+    const fill = document.createElement('div'); fill.className = 'fill';
+    fill.style.width = Math.max(2, (row.v / maxV) * 100).toFixed(1) + '%';
+    fill.style.background = cssVar(row.slot);
+    track.appendChild(fill);
+    const bv = document.createElement('span'); bv.className = 'bv'; bv.textContent = '$' + row.v.toLocaleString('en-AU');
+    div.appendChild(bl); div.appendChild(track); div.appendChild(bv);
+    cmpBars.appendChild(div);
+  });
+  const ratio = saving / BENCH;
+  cmpNote.textContent = ratio >= 1.15
+    ? `Your pattern is worth ${ratio.toFixed(1)}× the typical motorist's opportunity — alerts pay off fast.`
+    : ratio <= 0.85
+      ? 'Below the typical opportunity — still free money for a one-time alert setup.'
+      : 'Right on the typical Melbourne motorist’s opportunity.';
+}
+[fills, tank, gap].forEach(s => s.addEventListener('input', calc));
+
+/* ================= alert simulator ================= */
+const threshEl = document.getElementById('thresh'), threshVal = document.getElementById('threshVal');
+const alertChartEl = document.getElementById('alertChart');
+const alertTableEl = document.getElementById('alertTable');
+const alertTableBtn = document.getElementById('alertTableBtn');
+
+function cheapestSeries() {
+  const data = [], station = [];
+  for (let d = 0; d < DAYS; d++) {
+    let best = Infinity, bn = '';
+    series.forEach(s => { if (s.data[d] < best) { best = s.data[d]; bn = s.name; } });
+    data.push(Math.round(best * 10) / 10); station.push(bn);
+  }
+  return { data, station };
+}
+
+function thresholdValue() {
+  const f = FUELS[fuel];
+  const lo = f.low - 4, hi = f.high;
+  return Math.round((lo + (hi - lo) * threshPct) * 10) / 10;
+}
+
+function renderAlerts() {
+  const f = FUELS[fuel];
+  const { data, station } = cheapestSeries();
+  const th = thresholdValue();
+  threshVal.textContent = th.toFixed(1) + '¢/L ' + f.short;
+
+  /* an alert fires the first day price crosses to ≤ target (not every day below) */
+  const fired = [];
+  for (let d = 0; d < DAYS; d++) {
+    if (data[d] <= th && (d === 0 || data[d - 1] > th)) fired.push({ day: d, value: data[d], station: station[d] });
+  }
+
+  lineChart(alertChartEl, {
+    series: [{ id: 'cheap', name: 'Cheapest nearby', slot: '--s1', data }],
+    threshold: th,
+    markers: fired,
+    height: 240,
+    label: 'Cheapest nearby price versus your alert target'
+  });
+
+  /* table view twin */
+  alertTableEl.textContent = '';
+  const t = document.createElement('table');
+  const thead = document.createElement('thead'); const hr = document.createElement('tr');
+  ['Date', 'Cheapest ¢/L', 'Station', 'Alert'].forEach(h => { const thc = document.createElement('th'); thc.textContent = h; hr.appendChild(thc); });
+  thead.appendChild(hr); t.appendChild(thead);
+  const tb = document.createElement('tbody');
+  for (let d = 0; d < DAYS; d++) {
+    const tr = document.createElement('tr');
+    [dayLabels[d], data[d].toFixed(1), station[d], fired.some(m => m.day === d) ? '🔔 fired' : ''].forEach(v => {
+      const td = document.createElement('td'); td.textContent = v; tr.appendChild(td);
+    });
+    tb.appendChild(tr);
+  }
+  t.appendChild(tb); alertTableEl.appendChild(t);
+
+  /* notification feed */
+  document.getElementById('alertCount').textContent = fired.length;
+  document.getElementById('alertBest').textContent = fired.length ? Math.min(...fired.map(m => m.value)).toFixed(1) + '¢' : '—';
+  const high = Math.max(...data);
+  document.getElementById('alertSaved').textContent = fired.length ? '−' + (high - Math.min(...fired.map(m => m.value))).toFixed(1) + '¢/L' : '—';
+
+  const list = document.getElementById('notifList');
+  list.textContent = '';
+  if (!fired.length) {
+    const li = document.createElement('li'); li.className = 'notif-empty';
+    li.textContent = th <= Math.min(...data) ? 'Target below the fortnight low — no alerts. Drag the target up.' : 'No alerts fired — drag the target down toward the cycle low.';
+    list.appendChild(li);
+  } else {
+    [...fired].reverse().forEach(m => {
+      const li = document.createElement('li');
+      const bell = document.createElement('span'); bell.className = 'bell'; bell.textContent = '🔔';
+      const nb = document.createElement('div'); nb.className = 'nb';
+      const b = document.createElement('b'); b.textContent = `${FUELS[fuel].short} dropped to ${m.value.toFixed(1)}¢ at ${m.station}`;
+      const sp = document.createElement('span'); sp.textContent = `${dayLabels[m.day]} · within your radius · ${(th - m.value) >= 0 ? (th - m.value).toFixed(1) : '0.0'}¢ under your target`;
+      nb.appendChild(b); nb.appendChild(sp);
+      li.appendChild(bell); li.appendChild(nb);
+      list.appendChild(li);
+    });
+  }
+}
+
+threshEl.addEventListener('input', () => { threshPct = threshEl.value / 100; renderAlerts(); });
+alertTableBtn.addEventListener('click', () => {
+  const showing = !alertTableEl.hidden;
+  alertTableEl.hidden = showing;
+  alertChartEl.style.display = showing ? '' : 'none';
+  alertTableBtn.setAttribute('aria-pressed', String(!showing));
+  alertTableBtn.textContent = showing ? 'Table view' : 'Chart view';
+});
+
+/* ================= fuel filter (scopes explorer + calculator gap + alerts) ================= */
+document.querySelectorAll('#fuelSeg button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#fuelSeg button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    fuel = btn.dataset.fuel;
+    series = genCycle(fuel);
+    stations = genStations(fuel, series);
+    const f = FUELS[fuel];
+    gap.value = Math.min(45, Math.max(5, Math.round(f.high - f.low)));
+    calc();
+    renderCycle(); renderStations(); renderAlerts();
+  });
+});
+
+/* ================= state machine detail ================= */
+const STATE_INFO = {
+  submitted: '<b>Submitted.</b> A retailer lodges a new price via the mandatory real-time reporting channel. The record exists but is not yet public — it must clear validation first.',
+  validating: '<b>Validating.</b> Two checks run in parallel: format validation, and a legality check against the locked <b>DailyPriceCap</b>. A price above the cap is rejected and the breach flagged (penalties from $3,000 apply).',
+  live: '<b>Live.</b> The price is public. It alternates between <b>Active</b> (fresh) and <b>Stale</b> (ageing without re-confirmation). The moment a price becomes Active is the exact event <b>Price Drop Alerts</b> listens for — the improvement needs no new lifecycle.',
+  archived: '<b>Archived.</b> Superseded by a newer price; retained for trend analysis and audit, no longer shown to motorists.',
+  final: '<b>Destroyed.</b> Purged after the 7-year retention period — or immediately via the <b>terminate</b> marker if the station is deregistered.'
+};
+const stateDetail = document.getElementById('stateDetail');
+document.querySelectorAll('.life-state').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.life-state').forEach(x => x.classList.remove('sel'));
+    b.classList.add('sel');
+    stateDetail.innerHTML = STATE_INFO[b.dataset.state];
+  });
+});
+stateDetail.innerHTML = STATE_INFO.live;
+
+/* ================= lightbox ================= */
+const lightbox = document.getElementById('lightbox'), lbImg = document.getElementById('lbImg'), lbCap = document.getElementById('lbCap');
+document.querySelectorAll('.thumb').forEach(t => {
+  t.addEventListener('click', () => {
+    lbImg.src = t.dataset.img; lbImg.alt = t.dataset.cap; lbCap.textContent = t.dataset.cap;
+    lightbox.classList.add('open');
+  });
+});
+lightbox.addEventListener('click', () => lightbox.classList.remove('open'));
+document.addEventListener('keydown', e => { if (e.key === 'Escape') lightbox.classList.remove('open'); });
+
+/* ================= count-up ================= */
+function animateCount(elm) {
+  const target = parseFloat(elm.dataset.count);
+  const decimals = parseInt(elm.dataset.decimals || '0', 10);
+  const prefix = elm.dataset.prefix || '', suffix = elm.dataset.suffix || '';
+  const dur = 1000, start = performance.now();
+  const step = now => {
+    const p = Math.min((now - start) / dur, 1);
+    const eased = 1 - Math.pow(1 - p, 3);
+    elm.textContent = prefix + Number((target * eased).toFixed(decimals)).toLocaleString('en-AU', { minimumFractionDigits: decimals, maximumFractionDigits: decimals }) + suffix;
+    if (p < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+function animateGauge(circle) {
+  const r = 23, c = 2 * Math.PI * r;
+  const pct = parseFloat(circle.dataset.pct);
+  circle.style.strokeDasharray = c;
+  circle.style.strokeDashoffset = c;
+  circle.style.transition = 'stroke-dashoffset 1s ease';
+  requestAnimationFrame(() => requestAnimationFrame(() => { circle.style.strokeDashoffset = c * (1 - pct / 100); }));
+}
+/* hero figure */
+(function () {
+  const hf = document.getElementById('heroFig');
+  const dur = 1200, start = performance.now();
+  const step = now => {
+    const p = Math.min((now - start) / dur, 1);
+    hf.textContent = '$' + Math.round(333 * (1 - Math.pow(1 - p, 3)));
+    if (p < 1) requestAnimationFrame(step); else hf.textContent = '$333';
+  };
+  requestAnimationFrame(step);
+})();
+
+/* ================= scroll: reveal, progress, nav, toTop ================= */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in');
+      e.target.querySelectorAll('[data-count]').forEach(animateCount);
+      e.target.querySelectorAll('.ring[data-pct]').forEach(animateGauge);
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(elm => io.observe(elm));
+
+const progress = document.getElementById('progress');
+const toTop = document.getElementById('toTop');
+const navLinks = document.querySelectorAll('.sidebar nav a');
+const navSections = [...navLinks].map(l => document.querySelector(l.getAttribute('href')));
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  progress.style.width = ((h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100) + '%';
+  toTop.classList.toggle('show', h.scrollTop > 400);
+  let idx = 0;
+  navSections.forEach((s, i) => { if (s && window.scrollY >= s.offsetTop - 130) idx = i; });
+  navLinks.forEach(l => l.classList.remove('active'));
+  if (navLinks[idx]) navLinks[idx].classList.add('active');
+}, { passive: true });
+toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+/* ================= render all (init / theme / resize) ================= */
+function renderAll() {
+  renderSparks();
+  renderCycle();
+  renderStations();
+  renderAlerts();
+  calc();
+}
+let resizeT;
+window.addEventListener('resize', () => { clearTimeout(resizeT); resizeT = setTimeout(renderAll, 150); });
+
+/* init */
+let saved = null;
+try { saved = localStorage.getItem('ss-theme'); } catch (e) {}
+setTheme(saved || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+</script>
 </body>
 </html>
