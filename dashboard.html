@@ -369,18 +369,6 @@
   .lightbox img { max-width: 100%; max-height: 92vh; border-radius: 8px; background: #fff; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
   .lightbox .lb-cap { position: fixed; bottom: 0.9rem; left: 0; right: 0; text-align: center; color: #fff; font-size: 0.82rem; }
 
-  /* ============ documents ============ */
-  .doc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(225px, 1fr)); gap: 0.9rem; }
-  .doc-card {
-    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-    box-shadow: var(--shadow); padding: 0.85rem 1rem; text-decoration: none; color: var(--ink);
-    display: flex; gap: 0.7rem; align-items: flex-start; transition: box-shadow 0.15s, transform 0.15s, border-color 0.15s;
-  }
-  .doc-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); border-color: var(--s1); }
-  .doc-card .dico { font-size: 1.05rem; }
-  .doc-card .title { font-weight: 650; font-size: 0.84rem; }
-  .doc-card .desc { color: var(--muted); font-size: 0.74rem; margin-top: 0.22rem; }
-
   /* ============ chrome ============ */
   #toTop {
     position: fixed; right: 1.4rem; bottom: 1.4rem; width: 42px; height: 42px; border-radius: 50%;
@@ -423,7 +411,6 @@
       <a href="#state"><span class="ico">&#9201;</span> State Machine</a>
       <a href="#ui"><span class="ico">&#128241;</span> UI Evaluation</a>
       <a href="#diagrams"><span class="ico">&#128506;</span> Diagram Gallery</a>
-      <a href="#documents"><span class="ico">&#128196;</span> Documents</a>
     </nav>
     <div class="footer-note">An individual project by Ramkrushna Bhadekar</div>
   </aside>
@@ -830,27 +817,6 @@
             <span class="imgbox"><img src="diagrams/state-machine.png" alt="State machine diagram" loading="lazy"></span>
             <span class="cap">State machine<small>FuelPrice lifecycle</small></span>
           </button>
-        </div>
-      </section>
-
-      <!-- ============ 11 documents ============ -->
-      <section id="documents" class="reveal">
-        <div class="section-head">
-          <h2><span class="num">11</span> Source Documents</h2>
-          <div class="desc">Every diagram PDF and the full report behind this dashboard.</div>
-        </div>
-        <div class="doc-grid">
-          <a class="doc-card" href="Servo%20Saver%20Individual%20Project%20Report.pdf"><span class="dico">&#128214;</span><div><div class="title">Full Project Report</div><div class="desc">Complete write-up (PDF)</div></div></a>
-          <a class="doc-card" href="Activity_Diagram.pdf"><span class="dico">&#10148;</span><div><div class="title">Activity Diagram</div><div class="desc">UC1 — searching for nearby fuel</div></div></a>
-          <a class="doc-card" href="Use_case_Diagram.pdf"><span class="dico">&#128279;</span><div><div class="title">Use Case Diagram</div><div class="desc">Overall legacy system</div></div></a>
-          <a class="doc-card" href="Use_case_Improvised.pdf"><span class="dico">&#128161;</span><div><div class="title">Improved Use Case Diagram</div><div class="desc">With Price Drop Alerts</div></div></a>
-          <a class="doc-card" href="Expanded%20Use%20Cases.pdf"><span class="dico">&#128203;</span><div><div class="title">Expanded Use Case</div><div class="desc">UC1 detailed description</div></div></a>
-          <a class="doc-card" href="Expanded%20Use%20Cases%20Improvised.pdf"><span class="dico">&#128221;</span><div><div class="title">Expanded New Use Case</div><div class="desc">Set price drop alert</div></div></a>
-          <a class="doc-card" href="Class%20Diagram.pdf"><span class="dico">&#128193;</span><div><div class="title">Class Diagram</div><div class="desc">Legacy structure</div></div></a>
-          <a class="doc-card" href="Class%20Diagram_improvised.pdf"><span class="dico">&#128194;</span><div><div class="title">Improved Class Diagram</div><div class="desc">PriceAlert, AlertNotification</div></div></a>
-          <a class="doc-card" href="CRC%20Card.pdf"><span class="dico">&#128196;</span><div><div class="title">CRC Cards</div><div class="desc">FuelStation, FuelPrice</div></div></a>
-          <a class="doc-card" href="CRC_Cards_Improvised.pdf"><span class="dico">&#128209;</span><div><div class="title">New CRC Cards</div><div class="desc">PriceAlert, AlertNotification</div></div></a>
-          <a class="doc-card" href="State%20Machine%20Diagram.pdf"><span class="dico">&#9201;</span><div><div class="title">State Machine Diagram</div><div class="desc">FuelPrice lifecycle</div></div></a>
         </div>
       </section>
 
