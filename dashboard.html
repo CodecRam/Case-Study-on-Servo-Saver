@@ -401,29 +401,30 @@
       </div>
     </div>
     <nav>
-      <a href="#overview" class="active"><span class="ico">&#9737;</span> Overview</a>
-      <a href="#explorer"><span class="ico">&#9981;</span> Price Explorer</a>
-      <a href="#calculator"><span class="ico">&#129518;</span> Savings Calculator</a>
-      <a href="#alerts"><span class="ico">&#128276;</span> Price Drop Alerts</a>
-      <a href="#activity"><span class="ico">&#10148;</span> Activity Flow</a>
-      <a href="#usecase"><span class="ico">&#128279;</span> Use Cases</a>
-      <a href="#class"><span class="ico">&#128193;</span> Class &amp; CRC</a>
-      <a href="#state"><span class="ico">&#9201;</span> State Machine</a>
-      <a href="#ui"><span class="ico">&#128241;</span> UI Evaluation</a>
-      <a href="#diagrams"><span class="ico">&#128506;</span> Diagram Gallery</a>
+      <a href="#overview" class="active"><span class="ico">&#9737;</span> <span data-i18n="nav.overview">Overview</span></a>
+      <a href="#explorer"><span class="ico">&#9981;</span> <span data-i18n="nav.explorer">Price Explorer</span></a>
+      <a href="#calculator"><span class="ico">&#129518;</span> <span data-i18n="nav.calculator">Savings Calculator</span></a>
+      <a href="#alerts"><span class="ico">&#128276;</span> <span data-i18n="nav.alerts">Price Drop Alerts</span></a>
+      <a href="#activity"><span class="ico">&#10148;</span> <span data-i18n="nav.activity">Activity Flow</span></a>
+      <a href="#usecase"><span class="ico">&#128279;</span> <span data-i18n="nav.usecase">Use Cases</span></a>
+      <a href="#class"><span class="ico">&#128193;</span> <span data-i18n="nav.class">Class &amp; CRC</span></a>
+      <a href="#state"><span class="ico">&#9201;</span> <span data-i18n="nav.state">State Machine</span></a>
+      <a href="#ui"><span class="ico">&#128241;</span> <span data-i18n="nav.ui">UI Evaluation</span></a>
+      <a href="#diagrams"><span class="ico">&#128506;</span> <span data-i18n="nav.diagrams">Diagram Gallery</span></a>
     </nav>
-    <div class="footer-note">An individual project by Ramkrushna Bhadekar</div>
+    <div class="footer-note" data-i18n="footerNote">An individual project by Ramkrushna Bhadekar</div>
   </aside>
 
   <div class="main">
     <div class="topbar">
       <div>
-        <h1>Servo Saver — Fuel Price Feature</h1>
-        <div class="crumb">Service Victoria App · Product analysis by Ramkrushna Bhadekar</div>
+        <h1 data-i18n="topbar.h1">Servo Saver — Fuel Price Feature</h1>
+        <div class="crumb" data-i18n="topbar.crumb">Service Victoria App · Product analysis by Ramkrushna Bhadekar</div>
       </div>
       <div class="right">
-        <span class="pill sim">Illustrative data — modelled on the Melbourne price cycle</span>
-        <span class="pill">Scope: Customer (Motorist)</span>
+        <span class="pill sim" data-i18n="topbar.pillSim">Illustrative data — modelled on the Melbourne price cycle</span>
+        <span class="pill" data-i18n="topbar.pillScope">Scope: Customer (Motorist)</span>
+        <button class="theme-toggle" id="langToggle" style="width:44px; font-size:0.78rem; font-weight:600;" title="Switch language" aria-label="Switch language">中文</button>
         <button class="theme-toggle" id="themeToggle" title="Toggle dark mode" aria-label="Toggle dark mode">&#127769;</button>
       </div>
     </div>
@@ -432,57 +433,57 @@
 
       <!-- ============ hero ============ -->
       <div class="hero reveal">
-        <h2>Smarter fuel buying for Victorian motorists</h2>
-        <p>An analysis of Service Victoria's fuel-price feature — from the daily price-cap mechanism to a proposed <b>Price Drop Alerts</b> improvement that surfaces the cycle low the moment it happens. Explore the cycle, simulate an alert, and see the UML models behind the proposal.</p>
+        <h2 data-i18n="hero.h2">Smarter fuel buying for Victorian motorists</h2>
+        <p data-i18n-html="hero.p">An analysis of Service Victoria's fuel-price feature — from the daily price-cap mechanism to a proposed <b>Price Drop Alerts</b> improvement that surfaces the cycle low the moment it happens. Explore the cycle, simulate an alert, and see the UML models behind the proposal.</p>
         <div class="figure">
           <span class="big" id="heroFig">$0</span>
-          <span class="cap">potential annual saving per motorist buying at the cycle low instead of the high (ACCC, 2024)</span>
+          <span class="cap" data-i18n="hero.cap">potential annual saving per motorist buying at the cycle low instead of the high (ACCC, 2024)</span>
         </div>
       </div>
 
       <!-- ============ 01 overview ============ -->
       <section id="overview" class="reveal">
         <div class="section-head">
-          <h2><span class="num">01</span> Overview</h2>
-          <div class="desc">Key figures behind the business case for fuel-price transparency in Victoria.</div>
+          <h2><span class="num">01</span> <span data-i18n="s01.title">Overview</span></h2>
+          <div class="desc" data-i18n="s01.desc">Key figures behind the business case for fuel-price transparency in Victoria.</div>
         </div>
         <div class="tile-grid">
           <div class="tile">
-            <div class="label">AU fuel-retailing revenue, 2024–25</div>
+            <div class="label" data-i18n="s01.t1.label">AU fuel-retailing revenue, 2024–25</div>
             <div class="value" data-count="58.7" data-prefix="$" data-suffix="B" data-decimals="1">$0</div>
-            <div class="delta"><span class="up">▲ 4.4%</span> 5-yr annualised growth</div>
+            <div class="delta"><span class="up">▲ 4.4%</span> <span data-i18n="s01.t1.delta">5-yr annualised growth</span></div>
             <div class="spark" data-spark="46,47.5,48.2,50.1,49.4,51.8,53,54.6,55.1,56.4,57.8,58.7"></div>
-            <div class="src">IBISWorld (2025)</div>
+            <div class="src" data-i18n="s01.t1.src">IBISWorld (2025)</div>
           </div>
           <div class="tile">
-            <div class="label">Saving buying at the cycle low</div>
+            <div class="label" data-i18n="s01.t2.label">Saving buying at the cycle low</div>
             <div class="value" data-count="333" data-prefix="≈ $" data-suffix="/yr">≈ $0</div>
-            <div class="delta">per typical Melbourne motorist</div>
-            <div class="src">ACCC (2024)</div>
+            <div class="delta" data-i18n="s01.t2.delta">per typical Melbourne motorist</div>
+            <div class="src" data-i18n="s01.t2.src">ACCC (2024)</div>
           </div>
           <div class="tile">
-            <div class="label">Penalty per reporting breach</div>
+            <div class="label" data-i18n="s01.t3.label">Penalty per reporting breach</div>
             <div class="value" data-count="3000" data-prefix="$" data-suffix="+">$0</div>
-            <div class="delta">real-time reporting is mandatory</div>
-            <div class="src">Consumer Affairs Victoria (2025)</div>
+            <div class="delta" data-i18n="s01.t3.delta">real-time reporting is mandatory</div>
+            <div class="src" data-i18n="s01.t3.src">Consumer Affairs Victoria (2025)</div>
           </div>
           <div class="tile">
-            <div class="label">Services on Service Victoria</div>
+            <div class="label" data-i18n="s01.t4.label">Services on Service Victoria</div>
             <div class="value" data-count="100" data-suffix="+">0</div>
-            <div class="delta">single trusted sign-in inherited</div>
-            <div class="src">Service Victoria (2025)</div>
+            <div class="delta" data-i18n="s01.t4.delta">single trusted sign-in inherited</div>
+            <div class="src" data-i18n="s01.t4.src">Service Victoria (2025)</div>
           </div>
           <div class="tile">
-            <div class="label">Servo Saver launched</div>
-            <div class="value">Oct 2025</div>
-            <div class="delta">consumer face of the Fair Fuel Plan</div>
-            <div class="src">Premier of Victoria (2025)</div>
+            <div class="label" data-i18n="s01.t5.label">Servo Saver launched</div>
+            <div class="value" data-i18n="s01.t5.value">Oct 2025</div>
+            <div class="delta" data-i18n="s01.t5.delta">consumer face of the Fair Fuel Plan</div>
+            <div class="src" data-i18n="s01.t5.src">Premier of Victoria (2025)</div>
           </div>
           <div class="tile">
-            <div class="label">Proposed new use cases</div>
+            <div class="label" data-i18n="s01.t6.label">Proposed new use cases</div>
             <div class="value" data-count="5" data-suffix="">0</div>
-            <div class="delta">added purely additively — no legacy class changes</div>
-            <div class="src">This analysis</div>
+            <div class="delta" data-i18n="s01.t6.delta">added purely additively — no legacy class changes</div>
+            <div class="src" data-i18n="s01.t6.src">This analysis</div>
           </div>
         </div>
       </section>
@@ -490,16 +491,16 @@
       <!-- ============ 02 price explorer ============ -->
       <section id="explorer" class="reveal">
         <div class="section-head">
-          <h2><span class="num">02</span> Price Cycle Explorer</h2>
-          <div class="desc">Fourteen days of the Melbourne price cycle — a sharp restoration jump, then a slow decay to the low. The fuel filter scopes everything in this section.</div>
+          <h2><span class="num">02</span> <span data-i18n="s02.title">Price Cycle Explorer</span></h2>
+          <div class="desc" data-i18n="s02.desc">Fourteen days of the Melbourne price cycle — a sharp restoration jump, then a slow decay to the low. The fuel filter scopes everything in this section.</div>
         </div>
 
         <div class="filter-row">
-          <span class="flabel">Fuel type</span>
+          <span class="flabel" data-i18n="s02.fuelType">Fuel type</span>
           <div class="seg" id="fuelSeg" role="group" aria-label="Fuel type">
-            <button data-fuel="u91" class="active">Unleaded 91</button>
-            <button data-fuel="p95">Premium 95</button>
-            <button data-fuel="diesel">Diesel</button>
+            <button data-fuel="u91" class="active" data-i18n="fuel.u91">Unleaded 91</button>
+            <button data-fuel="p95" data-i18n="fuel.p95">Premium 95</button>
+            <button data-fuel="diesel" data-i18n="fuel.diesel">Diesel</button>
           </div>
         </div>
 
@@ -508,9 +509,9 @@
             <div class="chart-head">
               <div>
                 <h3 id="cycleTitle">U91 — price by brand, last 14 days (¢/L)</h3>
-                <p class="sub">Hover for the full readout · click a legend key to toggle a brand</p>
+                <p class="sub" data-i18n="s02.hoverHint">Hover for the full readout · click a legend key to toggle a brand</p>
               </div>
-              <button class="table-toggle" id="cycleTableBtn" aria-pressed="false">Table view</button>
+              <button class="table-toggle" id="cycleTableBtn" aria-pressed="false" data-i18n="common.tableView">Table view</button>
             </div>
             <div class="legend" id="cycleLegend"></div>
             <div class="chart-wrap" id="cycleChart"></div>
@@ -520,7 +521,7 @@
           <div class="panel">
             <div class="chart-head">
               <div>
-                <h3>Nearby stations — today</h3>
+                <h3 data-i18n="s02.stationsTitle">Nearby stations — today</h3>
                 <p class="sub" id="stationSub">Cheapest U91 within 10 km · click a column to sort</p>
               </div>
             </div>
@@ -528,10 +529,10 @@
               <table id="stationTable" aria-label="Nearby stations">
                 <thead>
                   <tr>
-                    <th class="sortable" data-key="name">Station <span class="dir"></span></th>
-                    <th class="sortable num-cell" data-key="dist">Km <span class="dir"></span></th>
+                    <th class="sortable" data-key="name"><span data-i18n="s02.colStation">Station</span> <span class="dir"></span></th>
+                    <th class="sortable num-cell" data-key="dist"><span data-i18n="s02.colKm">Km</span> <span class="dir"></span></th>
                     <th class="sortable num-cell" data-key="price">¢/L <span class="dir"></span></th>
-                    <th>Vs cap</th>
+                    <th data-i18n="s02.colCap">Vs cap</th>
                   </tr>
                 </thead>
                 <tbody></tbody>
@@ -544,35 +545,35 @@
       <!-- ============ 03 calculator ============ -->
       <section id="calculator" class="reveal">
         <div class="section-head">
-          <h2><span class="num">03</span> Savings Calculator</h2>
-          <div class="desc">What perfectly timing the cycle is worth for your driving pattern. The high–low gap follows the fuel selected above.</div>
+          <h2><span class="num">03</span> <span data-i18n="s03.title">Savings Calculator</span></h2>
+          <div class="desc" data-i18n="s03.desc">What perfectly timing the cycle is worth for your driving pattern. The high–low gap follows the fuel selected above.</div>
         </div>
         <div class="grid-2e">
           <div class="panel">
-            <h3>Your numbers</h3>
-            <p class="sub">Assumes ~70% of the tank refilled each fill-up.</p>
+            <h3 data-i18n="s03.yourNumbers">Your numbers</h3>
+            <p class="sub" data-i18n="s03.assumes">Assumes ~70% of the tank refilled each fill-up.</p>
             <div class="calc-row">
               <div class="calc-field">
-                <label>Fill-ups per week <b id="fillsVal">2</b></label>
+                <label><span data-i18n="s03.fillsLabel">Fill-ups per week</span> <b id="fillsVal">2</b></label>
                 <input type="range" id="fills" min="1" max="7" value="2">
               </div>
               <div class="calc-field">
-                <label>Tank size <b id="tankVal">55 L</b></label>
+                <label><span data-i18n="s03.tankLabel">Tank size</span> <b id="tankVal">55 L</b></label>
                 <input type="range" id="tank" min="30" max="90" value="55">
               </div>
               <div class="calc-field">
-                <label>High–low gap <b id="gapVal">25¢/L</b></label>
+                <label><span data-i18n="s03.gapLabel">High–low gap</span> <b id="gapVal">25¢/L</b></label>
                 <input type="range" id="gap" min="5" max="45" value="25">
               </div>
             </div>
             <div class="calc-result">
               <span class="big" id="calcOut">$0</span>
-              <span class="cap">saved per year by always buying at the cycle low instead of the high</span>
+              <span class="cap" data-i18n="s03.resultCap">saved per year by always buying at the cycle low instead of the high</span>
             </div>
           </div>
           <div class="panel">
-            <h3>Against the benchmark</h3>
-            <p class="sub">ACCC (2024) puts the typical Melbourne motorist's opportunity at ≈ $333/yr.</p>
+            <h3 data-i18n="s03.benchTitle">Against the benchmark</h3>
+            <p class="sub" data-i18n="s03.benchSub">ACCC (2024) puts the typical Melbourne motorist's opportunity at ≈ $333/yr.</p>
             <div class="cmp-bars" id="cmpBars"></div>
             <p style="font-size:0.76rem; color:var(--muted); line-height:1.5; margin-bottom:0;" id="cmpNote"></p>
           </div>
@@ -582,35 +583,35 @@
       <!-- ============ 04 alerts ============ -->
       <section id="alerts" class="reveal">
         <div class="section-head">
-          <h2><span class="num">04</span> Proposed Improvement — Price Drop Alerts</h2>
-          <div class="desc">Registered holders set a fuel type, target price, radius and quiet hours; the system pushes a notification when a nearby station drops to target. Simulate it against the last 14 days.</div>
+          <h2><span class="num">04</span> <span data-i18n="s04.title">Proposed Improvement — Price Drop Alerts</span></h2>
+          <div class="desc" data-i18n="s04.desc">Registered holders set a fuel type, target price, radius and quiet hours; the system pushes a notification when a nearby station drops to target. Simulate it against the last 14 days.</div>
         </div>
         <div class="grid-2">
           <div class="panel">
             <div class="chart-head">
               <div>
-                <h3>Alert simulator — cheapest nearby price vs your target</h3>
-                <p class="sub">Drag the target. Dots mark the days your alert would have fired.</p>
+                <h3 data-i18n="s04.simTitle">Alert simulator — cheapest nearby price vs your target</h3>
+                <p class="sub" data-i18n="s04.simSub">Drag the target. Dots mark the days your alert would have fired.</p>
               </div>
-              <button class="table-toggle" id="alertTableBtn" aria-pressed="false">Table view</button>
+              <button class="table-toggle" id="alertTableBtn" aria-pressed="false" data-i18n="common.tableView">Table view</button>
             </div>
             <div class="calc-field" style="max-width:340px; margin-bottom:0.8rem;">
-              <label>Target price <b id="threshVal">—</b></label>
+              <label><span data-i18n="s04.targetLabel">Target price</span> <b id="threshVal">—</b></label>
               <input type="range" id="thresh" min="0" max="100" value="35">
             </div>
             <div class="chart-wrap" id="alertChart"></div>
             <div id="alertTable" hidden style="overflow-x:auto;"></div>
           </div>
           <div class="panel">
-            <h3>Notifications this fortnight</h3>
-            <p class="sub">What the motorist would have received — no app-checking required.</p>
+            <h3 data-i18n="s04.notifTitle">Notifications this fortnight</h3>
+            <p class="sub" data-i18n="s04.notifSub">What the motorist would have received — no app-checking required.</p>
             <div class="alert-stats">
-              <div class="as"><div class="v" id="alertCount">0</div><div class="l">alerts fired</div></div>
-              <div class="as"><div class="v" id="alertBest">—</div><div class="l">best price caught</div></div>
-              <div class="as"><div class="v" id="alertSaved">—</div><div class="l">vs fortnight high</div></div>
+              <div class="as"><div class="v" id="alertCount">0</div><div class="l" data-i18n="s04.statFired">alerts fired</div></div>
+              <div class="as"><div class="v" id="alertBest">—</div><div class="l" data-i18n="s04.statBest">best price caught</div></div>
+              <div class="as"><div class="v" id="alertSaved">—</div><div class="l" data-i18n="s04.statSaved">vs fortnight high</div></div>
             </div>
             <ul class="notif-list" id="notifList"></ul>
-            <p style="font-size:0.75rem; color:var(--muted); line-height:1.55; margin:0.8rem 0 0;"><b style="color:var(--ink)">Why it works:</b> opt-in push at the moment value is highest (~3× retention — Airship 2024) · surfaces the ACCC's ≈$333/yr cycle low as it happens · steers demand to competitive stations (Premier of Victoria, 2025) · reuses existing location, price, cap and account components. <b style="color:var(--ink)">Trade-offs managed:</b> quiet hours, 10-alert cap, security review before build.</p>
+            <p style="font-size:0.75rem; color:var(--muted); line-height:1.55; margin:0.8rem 0 0;" data-i18n-html="s04.whyItWorks"><b style="color:var(--ink)">Why it works:</b> opt-in push at the moment value is highest (~3× retention — Airship 2024) · surfaces the ACCC's ≈$333/yr cycle low as it happens · steers demand to competitive stations (Premier of Victoria, 2025) · reuses existing location, price, cap and account components. <b style="color:var(--ink)">Trade-offs managed:</b> quiet hours, 10-alert cap, security review before build.</p>
           </div>
         </div>
       </section>
@@ -618,20 +619,20 @@
       <!-- ============ 05 activity ============ -->
       <section id="activity" class="reveal">
         <div class="section-head">
-          <h2><span class="num">05</span> Activity Flow — Searching for Nearby Fuel</h2>
-          <div class="desc">UC1, the motorist's core journey: location detection, a parallel price/cap fetch, and graceful handling of empty results.</div>
+          <h2><span class="num">05</span> <span data-i18n="s05.title">Activity Flow — Searching for Nearby Fuel</span></h2>
+          <div class="desc" data-i18n="s05.desc">UC1, the motorist's core journey: location detection, a parallel price/cap fetch, and graceful handling of empty results.</div>
         </div>
         <div class="panel">
           <div class="stepper">
-            <div class="step"><span class="tag">Start</span>Open app → tap "Servo Saver"</div>
+            <div class="step"><span class="tag" data-i18n="s05.tagStart">Start</span><span data-i18n="s05.step1">Open app → tap "Servo Saver"</span></div>
             <div class="arrow-sep">→</div>
-            <div class="step decision"><span class="tag">Decision</span>GPS permission?<br><small>granted → coords · denied → manual suburb</small></div>
+            <div class="step decision"><span class="tag" data-i18n="s05.tagDecision">Decision</span><span data-i18n="s05.step2">GPS permission?</span><br><small data-i18n="s05.step2sub">granted → coords · denied → manual suburb</small></div>
             <div class="arrow-sep">→</div>
-            <div class="step parallel"><span class="tag">Fork ‖ Join</span>Query prices ‖ retrieve daily caps <small>(parallel)</small></div>
+            <div class="step parallel"><span class="tag" data-i18n="s05.tagFork">Fork ‖ Join</span><span data-i18n="s05.step3">Query prices ‖ retrieve daily caps</span> <small data-i18n="s05.step3sub">(parallel)</small></div>
             <div class="arrow-sep">→</div>
-            <div class="step decision"><span class="tag">Decision</span>Stations found?<br><small>yes → render map · no → widen search</small></div>
+            <div class="step decision"><span class="tag" data-i18n="s05.tagDecision">Decision</span><span data-i18n="s05.step4">Stations found?</span><br><small data-i18n="s05.step4sub">yes → render map · no → widen search</small></div>
             <div class="arrow-sep">→</div>
-            <div class="step"><span class="tag">End</span>View prices → select station → details</div>
+            <div class="step"><span class="tag" data-i18n="s05.tagEnd">End</span><span data-i18n="s05.step5">View prices → select station → details</span></div>
           </div>
         </div>
       </section>
@@ -639,32 +640,32 @@
       <!-- ============ 06 use cases ============ -->
       <section id="usecase" class="reveal">
         <div class="section-head">
-          <h2><span class="num">06</span> Use Cases</h2>
-          <div class="desc">Relationship types across the service map, and the expanded exception flows for UC1.</div>
+          <h2><span class="num">06</span> <span data-i18n="s06.title">Use Cases</span></h2>
+          <div class="desc" data-i18n="s06.desc">Relationship types across the service map, and the expanded exception flows for UC1.</div>
         </div>
         <div class="grid-2e">
           <div class="panel">
-            <h3>Use case relationships</h3>
-            <p class="sub">Notably, no legacy use case has the system contact the motorist first — the gap Price Drop Alerts fills.</p>
+            <h3 data-i18n="s06.relTitle">Use case relationships</h3>
+            <p class="sub" data-i18n="s06.relSub">Notably, no legacy use case has the system contact the motorist first — the gap Price Drop Alerts fills.</p>
             <table>
-              <thead><tr><th>Relationship</th><th>Meaning</th><th>Examples</th></tr></thead>
+              <thead><tr><th data-i18n="s06.colRel">Relationship</th><th data-i18n="s06.colMeaning">Meaning</th><th data-i18n="s06.colExamples">Examples</th></tr></thead>
               <tbody>
-                <tr><td><span class="badge include">«include»</span></td><td>Mandatory sub-step</td><td>Detect location · Retrieve prices · Display results</td></tr>
-                <tr><td><span class="badge extend">«extend»</span></td><td>Optional enhancement</td><td>Manual entry · Filter · Sort · View price cap</td></tr>
-                <tr><td><span class="badge">generalisation</span></td><td>Specialised actor</td><td>Registered SV Account Holder ← User (Motorist)</td></tr>
-                <tr><td><span class="badge new">new</span></td><td>Proposed improvement</td><td>Set / edit / pause alert · Receive notification · Manage quiet hours</td></tr>
+                <tr><td><span class="badge include">«include»</span></td><td data-i18n="s06.r1.meaning">Mandatory sub-step</td><td data-i18n="s06.r1.examples">Detect location · Retrieve prices · Display results</td></tr>
+                <tr><td><span class="badge extend">«extend»</span></td><td data-i18n="s06.r2.meaning">Optional enhancement</td><td data-i18n="s06.r2.examples">Manual entry · Filter · Sort · View price cap</td></tr>
+                <tr><td><span class="badge" data-i18n="s06.r3.badge">generalisation</span></td><td data-i18n="s06.r3.meaning">Specialised actor</td><td data-i18n="s06.r3.examples">Registered SV Account Holder ← User (Motorist)</td></tr>
+                <tr><td><span class="badge new" data-i18n="s06.r4.badge">new</span></td><td data-i18n="s06.r4.meaning">Proposed improvement</td><td data-i18n="s06.r4.examples">Set / edit / pause alert · Receive notification · Manage quiet hours</td></tr>
               </tbody>
             </table>
           </div>
           <div class="panel">
-            <h3>Exception conditions — UC1</h3>
-            <p class="sub">Every failure path resolves to a usable state, never a dead end.</p>
+            <h3 data-i18n="s06.excTitle">Exception conditions — UC1</h3>
+            <p class="sub" data-i18n="s06.excSub">Every failure path resolves to a usable state, never a dead end.</p>
             <ul class="ex-list">
-              <li><span class="code">1.2</span> GPS not granted → manual-entry prompt, geocode, resume at 2.3.</li>
-              <li><span class="code">2.1</span> Location Services failure → fall back to manual entry.</li>
-              <li><span class="code">2.3</span> Price database unreachable → service-unavailable message + retry.</li>
-              <li><span class="code">2.4</span> No stations found → empty state, widen search radius.</li>
-              <li><span class="code">4.1</span> Station details fail to load → cached details + warning.</li>
+              <li><span class="code">1.2</span> <span data-i18n="s06.exc1">GPS not granted → manual-entry prompt, geocode, resume at 2.3.</span></li>
+              <li><span class="code">2.1</span> <span data-i18n="s06.exc2">Location Services failure → fall back to manual entry.</span></li>
+              <li><span class="code">2.3</span> <span data-i18n="s06.exc3">Price database unreachable → service-unavailable message + retry.</span></li>
+              <li><span class="code">2.4</span> <span data-i18n="s06.exc4">No stations found → empty state, widen search radius.</span></li>
+              <li><span class="code">4.1</span> <span data-i18n="s06.exc5">Station details fail to load → cached details + warning.</span></li>
             </ul>
           </div>
         </div>
@@ -673,13 +674,13 @@
       <!-- ============ 07 class & CRC ============ -->
       <section id="class" class="reveal">
         <div class="section-head">
-          <h2><span class="num">07</span> Class Diagram &amp; CRC Cards</h2>
-          <div class="desc">FuelStation and FuelPrice anchor the legacy structure; PriceAlert and AlertNotification extend it without altering any existing class.</div>
+          <h2><span class="num">07</span> <span data-i18n="s07.title">Class Diagram &amp; CRC Cards</span></h2>
+          <div class="desc" data-i18n="s07.desc">FuelStation and FuelPrice anchor the legacy structure; PriceAlert and AlertNotification extend it without altering any existing class.</div>
         </div>
         <div class="class-grid">
           <div class="class-box">
-            <div class="head">FuelStation <span class="badge">core</span></div>
-            <div class="body">
+            <div class="head">FuelStation <span class="badge" data-i18n="s07.core">core</span></div>
+            <div class="body" data-i18n-html="s07.b1">
               <b>Attributes:</b> stationId, name, brand, openingHours, address, isOperating<br><br>
               <b>Composes:</b> FuelPrice (1 → 0..*), DailyPriceCap (1 → 0..*)<br>
               <b>Aggregated by:</b> FuelRetailer<br><br>
@@ -687,8 +688,8 @@
             </div>
           </div>
           <div class="class-box">
-            <div class="head">FuelPrice <span class="badge">core</span></div>
-            <div class="body">
+            <div class="head">FuelPrice <span class="badge" data-i18n="s07.core">core</span></div>
+            <div class="body" data-i18n-html="s07.b2">
               <b>Attributes:</b> priceId, amount, submittedAt, status<br><br>
               <b>Validates against:</b> DailyPriceCap<br>
               <b>Part of:</b> FuelStation (composition)<br><br>
@@ -696,8 +697,8 @@
             </div>
           </div>
           <div class="class-box highlight">
-            <div class="head">PriceAlert <span class="badge new">new</span></div>
-            <div class="body">
+            <div class="head">PriceAlert <span class="badge new" data-i18n="s07.new">new</span></div>
+            <div class="body" data-i18n-html="s07.b3">
               <b>Attributes:</b> alertId, fuelCode, thresholdPrice, radiusKm, quietHours, status<br><br>
               <b>Belongs to:</b> RegisteredAccountHolder<br>
               <b>Matched against:</b> FuelPrice<br><br>
@@ -705,8 +706,8 @@
             </div>
           </div>
           <div class="class-box highlight">
-            <div class="head">AlertNotification <span class="badge new">new</span></div>
-            <div class="body">
+            <div class="head">AlertNotification <span class="badge new" data-i18n="s07.new">new</span></div>
+            <div class="body" data-i18n-html="s07.b4">
               <b>Attributes:</b> notificationId, channel, sentAt, deliveryStatus<br><br>
               <b>Part of:</b> PriceAlert (composition)<br><br>
               <b>Rule:</b> failed deliveries retry up to 3 times.
@@ -718,16 +719,16 @@
       <!-- ============ 08 state machine ============ -->
       <section id="state" class="reveal">
         <div class="section-head">
-          <h2><span class="num">08</span> State Machine — the FuelPrice Object</h2>
-          <div class="desc">The full lifecycle of one FuelPrice, from submission to destruction. Click a state to inspect it.</div>
+          <h2><span class="num">08</span> <span data-i18n="s08.title">State Machine — the FuelPrice Object</span></h2>
+          <div class="desc" data-i18n="s08.desc">The full lifecycle of one FuelPrice, from submission to destruction. Click a state to inspect it.</div>
         </div>
         <div class="panel">
           <div class="lifecycle" id="lifecycle">
-            <button class="life-state" data-state="submitted">● Submitted</button><span class="life-arrow">→</span>
-            <button class="life-state" data-state="validating">Validating</button><span class="life-arrow">→</span>
-            <button class="life-state sel" data-state="live">Live (Active ⇄ Stale)</button><span class="life-arrow">→</span>
-            <button class="life-state" data-state="archived">Archived</button><span class="life-arrow">→</span>
-            <button class="life-state terminal" data-state="final">◎ Destroyed</button>
+            <button class="life-state" data-state="submitted" data-i18n="s08.submitted">● Submitted</button><span class="life-arrow">→</span>
+            <button class="life-state" data-state="validating" data-i18n="s08.validating">Validating</button><span class="life-arrow">→</span>
+            <button class="life-state sel" data-state="live" data-i18n="s08.live">Live (Active ⇄ Stale)</button><span class="life-arrow">→</span>
+            <button class="life-state" data-state="archived" data-i18n="s08.archived">Archived</button><span class="life-arrow">→</span>
+            <button class="life-state terminal" data-state="final" data-i18n="s08.destroyed">◎ Destroyed</button>
           </div>
           <div class="state-detail" id="stateDetail"></div>
         </div>
@@ -736,8 +737,8 @@
       <!-- ============ 09 UI eval ============ -->
       <section id="ui" class="reveal">
         <div class="section-head">
-          <h2><span class="num">09</span> User Interface Evaluation</h2>
-          <div class="desc">Hands-on assessment of the live app's map view, list view, fuel-type selector and brand filter.</div>
+          <h2><span class="num">09</span> <span data-i18n="s09.title">User Interface Evaluation</span></h2>
+          <div class="desc" data-i18n="s09.desc">Hands-on assessment of the live app's map view, list view, fuel-type selector and brand filter.</div>
         </div>
         <div class="score-grid">
           <div class="score-card good">
@@ -746,13 +747,13 @@
                 <svg width="54" height="54"><circle class="ring-bg" cx="27" cy="27" r="23" fill="none" stroke-width="5"/><circle class="ring" cx="27" cy="27" r="23" fill="none" stroke-width="5" stroke-linecap="round" data-pct="40"/></svg>
                 <span class="num">4</span>
               </div>
-              <span class="label">✓ Good <small>strengths that work</small></span>
+              <span class="label" data-i18n-html="s09.goodLabel">✓ Good <small>strengths that work</small></span>
             </div>
             <ul>
-              <li>Map-first, colour-coded pins with a "Lowest" badge</li>
-              <li>"Tomorrow's price cap" panel for fill-now-or-wait</li>
-              <li>Comprehensive filters and sort</li>
-              <li>Inherits Service Victoria trust and single sign-in</li>
+              <li data-i18n="s09.good1">Map-first, colour-coded pins with a "Lowest" badge</li>
+              <li data-i18n="s09.good2">"Tomorrow's price cap" panel for fill-now-or-wait</li>
+              <li data-i18n="s09.good3">Comprehensive filters and sort</li>
+              <li data-i18n="s09.good4">Inherits Service Victoria trust and single sign-in</li>
             </ul>
           </div>
           <div class="score-card warn">
@@ -761,13 +762,13 @@
                 <svg width="54" height="54"><circle class="ring-bg" cx="27" cy="27" r="23" fill="none" stroke-width="5"/><circle class="ring" cx="27" cy="27" r="23" fill="none" stroke-width="5" stroke-linecap="round" data-pct="40"/></svg>
                 <span class="num">4</span>
               </div>
-              <span class="label">⚠ Needs work <small>gaps to close</small></span>
+              <span class="label" data-i18n-html="s09.warnLabel">⚠ Needs work <small>gaps to close</small></span>
             </div>
             <ul>
-              <li>Entirely pull-based — no proactive alerts</li>
-              <li>No save / watchlist capability</li>
-              <li>App-wide timestamp, not per-station freshness</li>
-              <li>Sort options not combinable</li>
+              <li data-i18n="s09.warn1">Entirely pull-based — no proactive alerts</li>
+              <li data-i18n="s09.warn2">No save / watchlist capability</li>
+              <li data-i18n="s09.warn3">App-wide timestamp, not per-station freshness</li>
+              <li data-i18n="s09.warn4">Sort options not combinable</li>
             </ul>
           </div>
           <div class="score-card crit">
@@ -776,11 +777,11 @@
                 <svg width="54" height="54"><circle class="ring-bg" cx="27" cy="27" r="23" fill="none" stroke-width="5"/><circle class="ring" cx="27" cy="27" r="23" fill="none" stroke-width="5" stroke-linecap="round" data-pct="20"/></svg>
                 <span class="num">2</span>
               </div>
-              <span class="label">✕ Defects <small>reads as broken</small></span>
+              <span class="label" data-i18n-html="s09.critLabel">✕ Defects <small>reads as broken</small></span>
             </div>
             <ul>
-              <li>"Opening hours not available" reads as broken</li>
-              <li>Inconsistent brand-filter logos (grey placeholders)</li>
+              <li data-i18n="s09.crit1">"Opening hours not available" reads as broken</li>
+              <li data-i18n="s09.crit2">Inconsistent brand-filter logos (grey placeholders)</li>
             </ul>
           </div>
         </div>
@@ -789,38 +790,38 @@
       <!-- ============ 10 diagram gallery ============ -->
       <section id="diagrams" class="reveal">
         <div class="section-head">
-          <h2><span class="num">10</span> Diagram Gallery</h2>
-          <div class="desc">The UML models behind this dashboard. Click any diagram to view it full size.</div>
+          <h2><span class="num">10</span> <span data-i18n="s10.title">Diagram Gallery</span></h2>
+          <div class="desc" data-i18n="s10.desc">The UML models behind this dashboard. Click any diagram to view it full size.</div>
         </div>
         <div class="gallery">
           <button class="thumb" data-img="diagrams/activity-diagram.png" data-cap="Activity diagram — UC1, searching for nearby fuel">
             <span class="imgbox"><img src="diagrams/activity-diagram.png" alt="Activity diagram" loading="lazy"></span>
-            <span class="cap">Activity diagram<small>UC1 — searching for nearby fuel</small></span>
+            <span class="cap" data-i18n-html="s10.g1">Activity diagram<small>UC1 — searching for nearby fuel</small></span>
           </button>
           <button class="thumb" data-img="diagrams/use-case-legacy.png" data-cap="Use case diagram — legacy system">
             <span class="imgbox"><img src="diagrams/use-case-legacy.png" alt="Legacy use case diagram" loading="lazy"></span>
-            <span class="cap">Use case — legacy<small>every service by actor</small></span>
+            <span class="cap" data-i18n-html="s10.g2">Use case — legacy<small>every service by actor</small></span>
           </button>
           <button class="thumb" data-img="diagrams/use-case-improved.png" data-cap="Use case diagram — with Price Drop Alerts">
             <span class="imgbox"><img src="diagrams/use-case-improved.png" alt="Improved use case diagram" loading="lazy"></span>
-            <span class="cap">Use case — improved<small>with Price Drop Alerts</small></span>
+            <span class="cap" data-i18n-html="s10.g3">Use case — improved<small>with Price Drop Alerts</small></span>
           </button>
           <button class="thumb" data-img="diagrams/class-diagram-legacy.png" data-cap="Class diagram — legacy structure">
             <span class="imgbox"><img src="diagrams/class-diagram-legacy.png" alt="Legacy class diagram" loading="lazy"></span>
-            <span class="cap">Class diagram — legacy<small>FuelStation, FuelPrice, caps</small></span>
+            <span class="cap" data-i18n-html="s10.g4">Class diagram — legacy<small>FuelStation, FuelPrice, caps</small></span>
           </button>
           <button class="thumb" data-img="diagrams/class-diagram-improved.png" data-cap="Class diagram — with PriceAlert and AlertNotification">
             <span class="imgbox"><img src="diagrams/class-diagram-improved.png" alt="Improved class diagram" loading="lazy"></span>
-            <span class="cap">Class diagram — improved<small>PriceAlert, AlertNotification</small></span>
+            <span class="cap" data-i18n-html="s10.g5">Class diagram — improved<small>PriceAlert, AlertNotification</small></span>
           </button>
           <button class="thumb" data-img="diagrams/state-machine.png" data-cap="State machine — the FuelPrice lifecycle">
             <span class="imgbox"><img src="diagrams/state-machine.png" alt="State machine diagram" loading="lazy"></span>
-            <span class="cap">State machine<small>FuelPrice lifecycle</small></span>
+            <span class="cap" data-i18n-html="s10.g6">State machine<small>FuelPrice lifecycle</small></span>
           </button>
         </div>
       </section>
 
-      <footer>
+      <footer data-i18n-html="footer.text">
         Servo Saver — Product Analysis · An individual project by Ramkrushna Bhadekar · See <a href="README.md">README.md</a> for the full write-up.<br>
         Chart data is illustrative, modelled on the Melbourne fuel price cycle; the figures in Overview are sourced as cited.
       </footer>
@@ -850,6 +851,221 @@ themeBtn.addEventListener('click', () => setTheme(root.getAttribute('data-theme'
 
 function cssVar(name) { return getComputedStyle(root).getPropertyValue(name).trim(); }
 
+/* ================= i18n ================= */
+const langToggle = document.getElementById('langToggle');
+let lang = 'en';
+const I18N = {
+  en: {
+    'nav.overview': 'Overview', 'nav.explorer': 'Price Explorer', 'nav.calculator': 'Savings Calculator',
+    'nav.alerts': 'Price Drop Alerts', 'nav.activity': 'Activity Flow', 'nav.usecase': 'Use Cases',
+    'nav.class': 'Class & CRC', 'nav.state': 'State Machine', 'nav.ui': 'UI Evaluation', 'nav.diagrams': 'Diagram Gallery',
+    'footerNote': 'An individual project by Ramkrushna Bhadekar',
+    'topbar.h1': 'Servo Saver — Fuel Price Feature',
+    'topbar.crumb': 'Service Victoria App · Product analysis by Ramkrushna Bhadekar',
+    'topbar.pillSim': 'Illustrative data — modelled on the Melbourne price cycle',
+    'topbar.pillScope': 'Scope: Customer (Motorist)',
+    'hero.h2': 'Smarter fuel buying for Victorian motorists',
+    'hero.p': 'An analysis of Service Victoria\'s fuel-price feature — from the daily price-cap mechanism to a proposed <b>Price Drop Alerts</b> improvement that surfaces the cycle low the moment it happens. Explore the cycle, simulate an alert, and see the UML models behind the proposal.',
+    'hero.cap': 'potential annual saving per motorist buying at the cycle low instead of the high (ACCC, 2024)',
+    's01.title': 'Overview', 's01.desc': 'Key figures behind the business case for fuel-price transparency in Victoria.',
+    's01.t1.label': 'AU fuel-retailing revenue, 2024–25', 's01.t1.delta': '5-yr annualised growth', 's01.t1.src': 'IBISWorld (2025)',
+    's01.t2.label': 'Saving buying at the cycle low', 's01.t2.delta': 'per typical Melbourne motorist', 's01.t2.src': 'ACCC (2024)',
+    's01.t3.label': 'Penalty per reporting breach', 's01.t3.delta': 'real-time reporting is mandatory', 's01.t3.src': 'Consumer Affairs Victoria (2025)',
+    's01.t4.label': 'Services on Service Victoria', 's01.t4.delta': 'single trusted sign-in inherited', 's01.t4.src': 'Service Victoria (2025)',
+    's01.t5.label': 'Servo Saver launched', 's01.t5.value': 'Oct 2025', 's01.t5.delta': 'consumer face of the Fair Fuel Plan', 's01.t5.src': 'Premier of Victoria (2025)',
+    's01.t6.label': 'Proposed new use cases', 's01.t6.delta': 'added purely additively — no legacy class changes', 's01.t6.src': 'This analysis',
+    's02.title': 'Price Cycle Explorer', 's02.desc': 'Fourteen days of the Melbourne price cycle — a sharp restoration jump, then a slow decay to the low. The fuel filter scopes everything in this section.',
+    's02.fuelType': 'Fuel type', 'fuel.u91': 'Unleaded 91', 'fuel.p95': 'Premium 95', 'fuel.diesel': 'Diesel',
+    's02.hoverHint': 'Hover for the full readout · click a legend key to toggle a brand',
+    'common.tableView': 'Table view', 'common.chartView': 'Chart view',
+    's02.stationsTitle': 'Nearby stations — today', 's02.colStation': 'Station', 's02.colKm': 'Km', 's02.colCap': 'Vs cap',
+    's03.title': 'Savings Calculator', 's03.desc': 'What perfectly timing the cycle is worth for your driving pattern. The high–low gap follows the fuel selected above.',
+    's03.yourNumbers': 'Your numbers', 's03.assumes': 'Assumes ~70% of the tank refilled each fill-up.',
+    's03.fillsLabel': 'Fill-ups per week', 's03.tankLabel': 'Tank size', 's03.gapLabel': 'High–low gap',
+    's03.resultCap': 'saved per year by always buying at the cycle low instead of the high',
+    's03.benchTitle': 'Against the benchmark', 's03.benchSub': 'ACCC (2024) puts the typical Melbourne motorist\'s opportunity at ≈ $333/yr.',
+    's04.title': 'Proposed Improvement — Price Drop Alerts',
+    's04.desc': 'Registered holders set a fuel type, target price, radius and quiet hours; the system pushes a notification when a nearby station drops to target. Simulate it against the last 14 days.',
+    's04.simTitle': 'Alert simulator — cheapest nearby price vs your target', 's04.simSub': 'Drag the target. Dots mark the days your alert would have fired.',
+    's04.targetLabel': 'Target price', 's04.notifTitle': 'Notifications this fortnight', 's04.notifSub': 'What the motorist would have received — no app-checking required.',
+    's04.statFired': 'alerts fired', 's04.statBest': 'best price caught', 's04.statSaved': 'vs fortnight high',
+    's04.whyItWorks': '<b style="color:var(--ink)">Why it works:</b> opt-in push at the moment value is highest (~3× retention — Airship 2024) · surfaces the ACCC\'s ≈$333/yr cycle low as it happens · steers demand to competitive stations (Premier of Victoria, 2025) · reuses existing location, price, cap and account components. <b style="color:var(--ink)">Trade-offs managed:</b> quiet hours, 10-alert cap, security review before build.',
+    's05.title': 'Activity Flow — Searching for Nearby Fuel', 's05.desc': 'UC1, the motorist\'s core journey: location detection, a parallel price/cap fetch, and graceful handling of empty results.',
+    's05.tagStart': 'Start', 's05.step1': 'Open app → tap "Servo Saver"',
+    's05.tagDecision': 'Decision', 's05.step2': 'GPS permission?', 's05.step2sub': 'granted → coords · denied → manual suburb',
+    's05.tagFork': 'Fork ‖ Join', 's05.step3': 'Query prices ‖ retrieve daily caps', 's05.step3sub': '(parallel)',
+    's05.step4': 'Stations found?', 's05.step4sub': 'yes → render map · no → widen search',
+    's05.tagEnd': 'End', 's05.step5': 'View prices → select station → details',
+    's06.title': 'Use Cases', 's06.desc': 'Relationship types across the service map, and the expanded exception flows for UC1.',
+    's06.relTitle': 'Use case relationships', 's06.relSub': 'Notably, no legacy use case has the system contact the motorist first — the gap Price Drop Alerts fills.',
+    's06.colRel': 'Relationship', 's06.colMeaning': 'Meaning', 's06.colExamples': 'Examples',
+    's06.r1.meaning': 'Mandatory sub-step', 's06.r1.examples': 'Detect location · Retrieve prices · Display results',
+    's06.r2.meaning': 'Optional enhancement', 's06.r2.examples': 'Manual entry · Filter · Sort · View price cap',
+    's06.r3.badge': 'generalisation', 's06.r3.meaning': 'Specialised actor', 's06.r3.examples': 'Registered SV Account Holder ← User (Motorist)',
+    's06.r4.badge': 'new', 's06.r4.meaning': 'Proposed improvement', 's06.r4.examples': 'Set / edit / pause alert · Receive notification · Manage quiet hours',
+    's06.excTitle': 'Exception conditions — UC1', 's06.excSub': 'Every failure path resolves to a usable state, never a dead end.',
+    's06.exc1': 'GPS not granted → manual-entry prompt, geocode, resume at 2.3.',
+    's06.exc2': 'Location Services failure → fall back to manual entry.',
+    's06.exc3': 'Price database unreachable → service-unavailable message + retry.',
+    's06.exc4': 'No stations found → empty state, widen search radius.',
+    's06.exc5': 'Station details fail to load → cached details + warning.',
+    's07.title': 'Class Diagram & CRC Cards', 's07.desc': 'FuelStation and FuelPrice anchor the legacy structure; PriceAlert and AlertNotification extend it without altering any existing class.',
+    's07.core': 'core', 's07.new': 'new',
+    's07.b1': '<b>Attributes:</b> stationId, name, brand, openingHours, address, isOperating<br><br><b>Composes:</b> FuelPrice (1 → 0..*), DailyPriceCap (1 → 0..*)<br><b>Aggregated by:</b> FuelRetailer<br><br><b>Rule:</b> at most one Active FuelPrice per FuelType.',
+    's07.b2': '<b>Attributes:</b> priceId, amount, submittedAt, status<br><br><b>Validates against:</b> DailyPriceCap<br><b>Part of:</b> FuelStation (composition)<br><br><b>Rule:</b> amount must not exceed the locked cap.',
+    's07.b3': '<b>Attributes:</b> alertId, fuelCode, thresholdPrice, radiusKm, quietHours, status<br><br><b>Belongs to:</b> RegisteredAccountHolder<br><b>Matched against:</b> FuelPrice<br><br><b>Rule:</b> fires only when an Active price ≤ threshold, outside quiet hours.',
+    's07.b4': '<b>Attributes:</b> notificationId, channel, sentAt, deliveryStatus<br><br><b>Part of:</b> PriceAlert (composition)<br><br><b>Rule:</b> failed deliveries retry up to 3 times.',
+    's08.title': 'State Machine — the FuelPrice Object', 's08.desc': 'The full lifecycle of one FuelPrice, from submission to destruction. Click a state to inspect it.',
+    's08.submitted': '● Submitted', 's08.validating': 'Validating', 's08.live': 'Live (Active ⇄ Stale)', 's08.archived': 'Archived', 's08.destroyed': '◎ Destroyed',
+    's08.detail.submitted': '<b>Submitted.</b> A retailer lodges a new price via the mandatory real-time reporting channel. The record exists but is not yet public — it must clear validation first.',
+    's08.detail.validating': '<b>Validating.</b> Two checks run in parallel: format validation, and a legality check against the locked <b>DailyPriceCap</b>. A price above the cap is rejected and the breach flagged (penalties from $3,000 apply).',
+    's08.detail.live': '<b>Live.</b> The price is public. It alternates between <b>Active</b> (fresh) and <b>Stale</b> (ageing without re-confirmation). The moment a price becomes Active is the exact event <b>Price Drop Alerts</b> listens for — the improvement needs no new lifecycle.',
+    's08.detail.archived': '<b>Archived.</b> Superseded by a newer price; retained for trend analysis and audit, no longer shown to motorists.',
+    's08.detail.final': '<b>Destroyed.</b> Purged after the 7-year retention period — or immediately via the <b>terminate</b> marker if the station is deregistered.',
+    's09.title': 'User Interface Evaluation', 's09.desc': 'Hands-on assessment of the live app\'s map view, list view, fuel-type selector and brand filter.',
+    's09.goodLabel': '✓ Good <small>strengths that work</small>',
+    's09.good1': 'Map-first, colour-coded pins with a "Lowest" badge', 's09.good2': '"Tomorrow\'s price cap" panel for fill-now-or-wait',
+    's09.good3': 'Comprehensive filters and sort', 's09.good4': 'Inherits Service Victoria trust and single sign-in',
+    's09.warnLabel': '⚠ Needs work <small>gaps to close</small>',
+    's09.warn1': 'Entirely pull-based — no proactive alerts', 's09.warn2': 'No save / watchlist capability',
+    's09.warn3': 'App-wide timestamp, not per-station freshness', 's09.warn4': 'Sort options not combinable',
+    's09.critLabel': '✕ Defects <small>reads as broken</small>',
+    's09.crit1': '"Opening hours not available" reads as broken', 's09.crit2': 'Inconsistent brand-filter logos (grey placeholders)',
+    's10.title': 'Diagram Gallery', 's10.desc': 'The UML models behind this dashboard. Click any diagram to view it full size.',
+    's10.g1': 'Activity diagram<small>UC1 — searching for nearby fuel</small>',
+    's10.g2': 'Use case — legacy<small>every service by actor</small>',
+    's10.g3': 'Use case — improved<small>with Price Drop Alerts</small>',
+    's10.g4': 'Class diagram — legacy<small>FuelStation, FuelPrice, caps</small>',
+    's10.g5': 'Class diagram — improved<small>PriceAlert, AlertNotification</small>',
+    's10.g6': 'State machine<small>FuelPrice lifecycle</small>',
+    'footer.text': 'Servo Saver — Product Analysis · An individual project by Ramkrushna Bhadekar · See <a href="README.md">README.md</a> for the full write-up.<br>Chart data is illustrative, modelled on the Melbourne fuel price cycle; the figures in Overview are sourced as cited.',
+    'js.cycleTitleSuffix': '— price by brand, last 14 days (¢/L)', 'js.cycleAriaSuffix': 'price by brand over the last 14 days',
+    'js.stationSubTpl': 'Cheapest {fuel} within 10 km · click a column to sort',
+    'js.colDate': 'Date', 'js.colCheapest': 'Cheapest ¢/L', 'js.colStation2': 'Station', 'js.colAlert': 'Alert',
+    'js.target': 'target', 'js.yourTarget': 'Your target', 'js.you': 'You', 'js.acccTypical': 'ACCC typical',
+    'js.cmpHigh': 'Your pattern is worth {ratio}× the typical motorist\'s opportunity — alerts pay off fast.',
+    'js.cmpLow': 'Below the typical opportunity — still free money for a one-time alert setup.',
+    'js.cmpMid': 'Right on the typical Melbourne motorist’s opportunity.',
+    'js.underCapTpl': '−{diff}¢ under', 'js.atCap': 'at cap', 'js.lowestBadge': '✓ Lowest', 'js.fired': '🔔 fired',
+    'js.notifEmpty1': 'Target below the fortnight low — no alerts. Drag the target up.',
+    'js.notifEmpty2': 'No alerts fired — drag the target down toward the cycle low.',
+    'js.notifDroppedTpl': '{fuel} dropped to {price}¢ at {station}',
+    'js.notifSubTpl': '{date} · within your radius · {diff}¢ under your target'
+  },
+  zh: {
+    'nav.overview': '概览', 'nav.explorer': '油价浏览器', 'nav.calculator': '省钱计算器',
+    'nav.alerts': '降价提醒', 'nav.activity': '活动流程', 'nav.usecase': '用例',
+    'nav.class': '类图与CRC', 'nav.state': '状态机', 'nav.ui': '界面评估', 'nav.diagrams': '图表画廊',
+    'footerNote': 'Ramkrushna Bhadekar 的个人项目',
+    'topbar.h1': 'Servo Saver — 油价功能',
+    'topbar.crumb': 'Service Victoria 应用 · Ramkrushna Bhadekar 的产品分析',
+    'topbar.pillSim': '示例数据 — 参照墨尔本油价周期建模',
+    'topbar.pillScope': '范围：客户（驾驶者）',
+    'hero.h2': '让维多利亚州驾驶者更聪明地加油',
+    'hero.p': '对 Service Victoria 油价功能的分析——从每日限价机制，到一项提议中的<b>降价提醒</b>改进，可在价格周期触底的瞬间提示用户。探索价格周期、模拟一次提醒，并查看该提案背后的 UML 模型。',
+    'hero.cap': '若在价格周期最低点而非最高点加油，驾驶者每年可能节省的金额（ACCC，2024）',
+    's01.title': '概览', 's01.desc': '支撑维多利亚州油价透明化商业案例的关键数据。',
+    's01.t1.label': '澳大利亚燃油零售业收入，2024–25', 's01.t1.delta': '过去5年年化增长', 's01.t1.src': 'IBISWorld（2025）',
+    's01.t2.label': '在价格周期低点加油可节省', 's01.t2.delta': '按典型墨尔本驾驶者计算', 's01.t2.src': 'ACCC（2024）',
+    's01.t3.label': '每次上报违规的罚款', 's01.t3.delta': '实时上报为强制要求', 's01.t3.src': '维州消费者事务厅（2025）',
+    's01.t4.label': 'Service Victoria 平台服务数量', 's01.t4.delta': '继承单一可信登录', 's01.t4.src': 'Service Victoria（2025）',
+    's01.t5.label': 'Servo Saver 上线时间', 's01.t5.value': '2025年10月', 's01.t5.delta': '“公平燃油计划”的消费者门面', 's01.t5.src': '维州州长办公室（2025）',
+    's01.t6.label': '新增提议用例', 's01.t6.delta': '完全增量添加 — 不改动任何既有类', 's01.t6.src': '本分析',
+    's02.title': '油价周期浏览器', 's02.desc': '墨尔本价格周期的十四天走势 — 一次急剧的价格回升，随后缓慢衰减至最低点。本节所有内容均受燃油筛选器影响。',
+    's02.fuelType': '燃油类型', 'fuel.u91': '无铅汽油91', 'fuel.p95': '优质汽油95', 'fuel.diesel': '柴油',
+    's02.hoverHint': '悬停查看完整数据 · 点击图例可切换某个品牌',
+    'common.tableView': '表格视图', 'common.chartView': '图表视图',
+    's02.stationsTitle': '附近加油站 — 今日', 's02.colStation': '加油站', 's02.colKm': '公里', 's02.colCap': '对比限价',
+    's03.title': '省钱计算器', 's03.desc': '完美把握价格周期对你的用车习惯来说值多少钱。高低差价沿用上方所选燃油类型。',
+    's03.yourNumbers': '你的数据', 's03.assumes': '假设每次加油约加满油箱的70%。',
+    's03.fillsLabel': '每周加油次数', 's03.tankLabel': '油箱容量', 's03.gapLabel': '高低差价',
+    's03.resultCap': '若始终在价格周期低点而非高点加油，每年可节省的金额',
+    's03.benchTitle': '与基准对比', 's03.benchSub': 'ACCC（2024）测算典型墨尔本驾驶者的潜在节省约为每年 $333。',
+    's04.title': '提议改进 — 降价提醒',
+    's04.desc': '已注册用户设置燃油类型、目标价格、范围半径与免打扰时段；当附近加油站降至目标价时，系统推送通知。以下用过去14天数据进行模拟。',
+    's04.simTitle': '提醒模拟器 — 附近最低价 vs 你的目标价', 's04.simSub': '拖动目标滑块。圆点标记提醒本应触发的日期。',
+    's04.targetLabel': '目标价格', 's04.notifTitle': '本两周内的通知', 's04.notifSub': '驾驶者本应收到的内容 — 无需打开App查看。',
+    's04.statFired': '次提醒已触发', 's04.statBest': '捕获到的最优价格', 's04.statSaved': '相对两周内最高价',
+    's04.whyItWorks': '<b style="color:var(--ink)">为何有效：</b>在价值最高的时刻主动推送（留存率约提升3倍 — Airship 2024）· 在 ACCC 所测算的约$333/年周期低点出现时即时呈现 · 引导需求流向有竞争力的加油站（维州州长办公室，2025）· 复用现有的位置、价格、限价与账户组件。<b style="color:var(--ink)">已权衡的取舍：</b>免打扰时段、单账户最多10个提醒、构建前需安全评审。',
+    's05.title': '活动流程 — 搜索附近加油站', 's05.desc': 'UC1，驾驶者的核心使用流程：定位检测、并行获取价格与限价，并妥善处理空结果。',
+    's05.tagStart': '开始', 's05.step1': '打开App → 点击“Servo Saver”',
+    's05.tagDecision': '判断', 's05.step2': 'GPS权限？', 's05.step2sub': '已授权 → 获取坐标 · 已拒绝 → 手动输入区域',
+    's05.tagFork': '分叉 ‖ 汇合', 's05.step3': '查询价格 ‖ 获取每日限价', 's05.step3sub': '（并行）',
+    's05.step4': '找到加油站？', 's05.step4sub': '是 → 渲染地图 · 否 → 扩大搜索范围',
+    's05.tagEnd': '结束', 's05.step5': '查看价格 → 选择加油站 → 详情',
+    's06.title': '用例', 's06.desc': '服务地图中的关系类型，以及 UC1 的详细异常流程。',
+    's06.relTitle': '用例关系', 's06.relSub': '值得注意的是，没有任何既有用例会让系统主动联系驾驶者 — 这正是“降价提醒”填补的空白。',
+    's06.colRel': '关系类型', 's06.colMeaning': '含义', 's06.colExamples': '示例',
+    's06.r1.meaning': '强制子步骤', 's06.r1.examples': '检测位置 · 获取价格 · 显示结果',
+    's06.r2.meaning': '可选增强', 's06.r2.examples': '手动输入 · 筛选 · 排序 · 查看限价',
+    's06.r3.badge': '泛化', 's06.r3.meaning': '特化角色', 's06.r3.examples': '已注册SV账户持有者 ← 用户（驾驶者）',
+    's06.r4.badge': '新增', 's06.r4.meaning': '提议中的改进', 's06.r4.examples': '设置/编辑/暂停提醒 · 接收通知 · 管理免打扰时段',
+    's06.excTitle': '异常情况 — UC1', 's06.excSub': '每条失败路径最终都会回到可用状态，绝不会陷入死胡同。',
+    's06.exc1': 'GPS未授权 → 弹出手动输入提示，进行地理编码，从2.3步骤恢复。',
+    's06.exc2': '定位服务失败 → 回退至手动输入。',
+    's06.exc3': '价格数据库不可达 → 显示服务不可用提示并重试。',
+    's06.exc4': '未找到加油站 → 显示空状态，扩大搜索半径。',
+    's06.exc5': '加油站详情加载失败 → 使用缓存详情并提示警告。',
+    's07.title': '类图与CRC卡片', 's07.desc': 'FuelStation 与 FuelPrice 支撑起既有结构；PriceAlert 与 AlertNotification 在不改动任何既有类的前提下对其进行扩展。',
+    's07.core': '核心', 's07.new': '新增',
+    's07.b1': '<b>属性：</b> stationId, name, brand, openingHours, address, isOperating<br><br><b>组合：</b> FuelPrice (1 → 0..*)、DailyPriceCap (1 → 0..*)<br><b>被聚合于：</b> FuelRetailer<br><br><b>规则：</b>每种燃油类型最多只能有一个处于 Active 状态的 FuelPrice。',
+    's07.b2': '<b>属性：</b> priceId, amount, submittedAt, status<br><br><b>校验对象：</b> DailyPriceCap<br><b>组成部分属于：</b> FuelStation（组合关系）<br><br><b>规则：</b>金额不得超过已锁定的限价。',
+    's07.b3': '<b>属性：</b> alertId, fuelCode, thresholdPrice, radiusKm, quietHours, status<br><br><b>归属于：</b> RegisteredAccountHolder<br><b>匹配对象：</b> FuelPrice<br><br><b>规则：</b>仅当存在一个 Active 价格 ≤ 阈值、且不在免打扰时段内时才触发。',
+    's07.b4': '<b>属性：</b> notificationId, channel, sentAt, deliveryStatus<br><br><b>组成部分属于：</b> PriceAlert（组合关系）<br><br><b>规则：</b>投递失败最多重试3次。',
+    's08.title': '状态机 — FuelPrice 对象', 's08.desc': '单个 FuelPrice 从提交到销毁的完整生命周期。点击某个状态可查看详情。',
+    's08.submitted': '● 已提交', 's08.validating': '校验中', 's08.live': '生效中（Active ⇄ Stale）', 's08.archived': '已归档', 's08.destroyed': '◎ 已销毁',
+    's08.detail.submitted': '<b>已提交。</b>零售商通过强制性的实时上报渠道登记一个新价格。该记录已存在但尚未公开——必须先通过校验。',
+    's08.detail.validating': '<b>校验中。</b>两项检查并行进行：格式校验，以及针对已锁定<b>DailyPriceCap</b>的合法性检查。超过限价的价格将被拒绝，并标记为违规（罚款自$3,000起）。',
+    's08.detail.live': '<b>生效中。</b>价格已公开，会在<b>Active</b>（最新）与<b>Stale</b>（未再确认、逐渐过期）之间切换。价格变为 Active 的那一刻，正是<b>降价提醒</b>所监听的确切事件——该改进无需任何新的生命周期。',
+    's08.detail.archived': '<b>已归档。</b>被更新的价格取代；保留用于趋势分析与审计，不再展示给驾驶者。',
+    's08.detail.final': '<b>已销毁。</b>在7年保留期后被清除——若加油站被注销，则通过<b>terminate</b>标记立即清除。',
+    's09.title': '用户界面评估', 's09.desc': '对现有App地图视图、列表视图、燃油类型选择器与品牌筛选器的实际体验评估。',
+    's09.goodLabel': '✓ 优点 <small>行之有效的长处</small>',
+    's09.good1': '以地图为先，配色区分图钉并带“最低价”标签', 's09.good2': '“明日限价”面板，帮助判断是现在加油还是等待',
+    's09.good3': '全面的筛选与排序功能', 's09.good4': '继承了 Service Victoria 的信任与单点登录',
+    's09.warnLabel': '⚠ 待改进 <small>需要弥补的差距</small>',
+    's09.warn1': '完全依赖用户主动查询 — 没有主动提醒', 's09.warn2': '没有收藏/关注列表功能',
+    's09.warn3': '时间戳为全App统一，而非按加油站分别更新', 's09.warn4': '排序选项不可组合使用',
+    's09.critLabel': '✕ 缺陷 <small>体验上如同故障</small>',
+    's09.crit1': '“营业时间不可用”让人感觉像是故障', 's09.crit2': '品牌筛选图标不一致（灰色占位图）',
+    's10.title': '图表画廊', 's10.desc': '本仪表盘背后的 UML 模型。点击任意图表可查看大图。',
+    's10.g1': '活动图<small>UC1 — 搜索附近加油站</small>',
+    's10.g2': '用例图 — 既有系统<small>按角色划分的每项服务</small>',
+    's10.g3': '用例图 — 改进版<small>包含降价提醒</small>',
+    's10.g4': '类图 — 既有结构<small>FuelStation、FuelPrice、限价</small>',
+    's10.g5': '类图 — 改进版<small>PriceAlert、AlertNotification</small>',
+    's10.g6': '状态机<small>FuelPrice 生命周期</small>',
+    'footer.text': 'Servo Saver — 产品分析 · Ramkrushna Bhadekar 的个人项目 · 完整说明请见 <a href="README.md">README.md</a>。<br>图表数据为示例数据，参照墨尔本燃油价格周期建模；概览中的数据均已注明来源。',
+    'js.cycleTitleSuffix': '— 各品牌价格走势，近14天（¢/L）', 'js.cycleAriaSuffix': '各品牌近14天价格走势',
+    'js.stationSubTpl': '10公里内最便宜的 {fuel} · 点击列标题排序',
+    'js.colDate': '日期', 'js.colCheapest': '最低价 ¢/L', 'js.colStation2': '加油站', 'js.colAlert': '提醒',
+    'js.target': '目标', 'js.yourTarget': '你的目标', 'js.you': '你', 'js.acccTypical': 'ACCC典型值',
+    'js.cmpHigh': '你的用车模式价值是典型驾驶者潜在节省的 {ratio} 倍 — 设置提醒回报很快。',
+    'js.cmpLow': '低于典型的潜在节省 — 但一次性设置提醒仍是白得的钱。',
+    'js.cmpMid': '正好符合典型墨尔本驾驶者的潜在节省水平。',
+    'js.underCapTpl': '低于限价 {diff}¢', 'js.atCap': '等于限价', 'js.lowestBadge': '✓ 最低价', 'js.fired': '🔔 已触发',
+    'js.notifEmpty1': '目标价低于两周内最低价 — 不会有提醒。请把目标调高。',
+    'js.notifEmpty2': '没有提醒触发 — 请将目标向价格周期低点调低。',
+    'js.notifDroppedTpl': '{fuel} 价格降至 {price}¢，位于 {station}',
+    'js.notifSubTpl': '{date} · 在你的范围内 · 比目标低 {diff}¢'
+  }
+};
+function tr(key) { return (I18N[lang] && I18N[lang][key]) || I18N.en[key] || key; }
+function applyI18n() {
+  document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+  document.querySelectorAll('[data-i18n]').forEach(elm => { elm.textContent = tr(elm.dataset.i18n); });
+  document.querySelectorAll('[data-i18n-html]').forEach(elm => { elm.innerHTML = tr(elm.dataset.i18nHtml); });
+  langToggle.textContent = lang === 'en' ? '中文' : 'EN';
+  dayLabels = buildDayLabels();
+  renderStateDetail(currentState);
+  renderAll();
+}
+langToggle.addEventListener('click', () => {
+  lang = lang === 'en' ? 'zh' : 'en';
+  try { localStorage.setItem('ss-lang', lang); } catch (e) {}
+  applyI18n();
+});
+
 /* ================= seeded data model ================= */
 function mulberry32(seed) {
   return function () {
@@ -861,14 +1077,16 @@ function mulberry32(seed) {
 }
 
 const DAYS = 14;
-const dayLabels = [];
-{
+function buildDayLabels() {
+  const labels = [];
   const now = new Date();
   for (let i = DAYS - 1; i >= 0; i--) {
     const d = new Date(now); d.setDate(now.getDate() - i);
-    dayLabels.push(d.toLocaleDateString('en-AU', { day: 'numeric', month: 'short' }));
+    labels.push(d.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-AU', { day: 'numeric', month: 'short' }));
   }
+  return labels;
 }
+let dayLabels = buildDayLabels();
 
 /* Melbourne cycle: sharp restoration jump, then slow decay to the low. */
 const FUELS = {
@@ -993,7 +1211,7 @@ function lineChart(container, opts) {
     const ty = y(opts.threshold);
     svg.appendChild(el('line', { x1: pad.left, x2: W - pad.right, y1: ty, y2: ty, stroke: mutedC, 'stroke-width': 1.5, 'stroke-dasharray': '5 4' }));
     const tl = el('text', { x: pad.left + 6, y: ty - 5, 'font-size': 9.5, fill: mutedC });
-    tl.textContent = 'target'; svg.appendChild(tl);
+    tl.textContent = tr('js.target'); svg.appendChild(tl);
   }
 
   /* series lines */
@@ -1048,7 +1266,7 @@ function lineChart(container, opts) {
     });
     if (opts.threshold != null) {
       const row = document.createElement('div'); row.className = 'trow';
-      const tn = document.createElement('span'); tn.className = 'tn'; tn.textContent = 'Your target';
+      const tn = document.createElement('span'); tn.className = 'tn'; tn.textContent = tr('js.yourTarget');
       const tv = document.createElement('span'); tv.className = 'tv'; tv.textContent = opts.threshold.toFixed(1) + '¢';
       row.appendChild(tn); row.appendChild(tv);
       tip.appendChild(row);
@@ -1118,7 +1336,7 @@ function renderCycleTable() {
   const t = document.createElement('table');
   const thead = document.createElement('thead');
   const hr = document.createElement('tr');
-  const th0 = document.createElement('th'); th0.textContent = 'Date'; hr.appendChild(th0);
+  const th0 = document.createElement('th'); th0.textContent = tr('js.colDate'); hr.appendChild(th0);
   series.forEach(s => { const th = document.createElement('th'); th.className = 'num-cell'; th.textContent = s.name; hr.appendChild(th); });
   thead.appendChild(hr); t.appendChild(thead);
   const tb = document.createElement('tbody');
@@ -1135,10 +1353,10 @@ function renderCycleTable() {
 function renderCycle() {
   renderCycleLegend();
   const f = FUELS[fuel];
-  document.getElementById('cycleTitle').textContent = `${f.short} — price by brand, last 14 days (¢/L)`;
+  document.getElementById('cycleTitle').textContent = `${f.short} ${tr('js.cycleTitleSuffix')}`;
   lineChart(cycleChartEl, {
     series: series.map(s => ({ ...s, hidden: hiddenBrands.has(s.id) })),
-    label: `${f.name} price by brand over the last 14 days`
+    label: `${tr('fuel.' + fuel)} ${tr('js.cycleAriaSuffix')}`
   });
   renderCycleTable();
 }
@@ -1149,13 +1367,13 @@ cycleTableBtn.addEventListener('click', () => {
   cycleChartEl.style.display = showing ? '' : 'none';
   cycleLegendEl.style.display = showing ? '' : 'none';
   cycleTableBtn.setAttribute('aria-pressed', String(!showing));
-  cycleTableBtn.textContent = showing ? 'Table view' : 'Chart view';
+  cycleTableBtn.textContent = showing ? tr('common.tableView') : tr('common.chartView');
 });
 
 /* ================= station table ================= */
 const stationBody = document.querySelector('#stationTable tbody');
 function renderStations() {
-  document.getElementById('stationSub').textContent = `Cheapest ${FUELS[fuel].short} within 10 km · click a column to sort`;
+  document.getElementById('stationSub').textContent = tr('js.stationSubTpl').replace('{fuel}', FUELS[fuel].short);
   const rows = [...stations].sort((a, b) => {
     const k = stationSort.key;
     const va = a[k], vb = b[k];
@@ -1164,7 +1382,7 @@ function renderStations() {
   const lowest = Math.min(...stations.map(s => s.price));
   stationBody.textContent = '';
   rows.forEach(r => {
-    const tr = document.createElement('tr');
+    const trEl = document.createElement('tr');
 
     const td1 = document.createElement('td');
     if (r.brandSlot) { const dot = document.createElement('span'); dot.className = 'brand-key'; dot.style.background = cssVar(r.brandSlot); td1.appendChild(dot); }
@@ -1172,12 +1390,12 @@ function renderStations() {
     td1.appendChild(document.createTextNode(' · ' + r.suburb));
     if (r.price === lowest) {
       td1.appendChild(document.createTextNode(' '));
-      const bg = document.createElement('span'); bg.className = 'badge lowest'; bg.textContent = '✓ Lowest'; td1.appendChild(bg);
+      const bg = document.createElement('span'); bg.className = 'badge lowest'; bg.textContent = tr('js.lowestBadge'); td1.appendChild(bg);
     }
-    tr.appendChild(td1);
+    trEl.appendChild(td1);
 
-    const td2 = document.createElement('td'); td2.className = 'num-cell'; td2.textContent = r.dist.toFixed(1); tr.appendChild(td2);
-    const td3 = document.createElement('td'); td3.className = 'num-cell'; const pb = document.createElement('b'); pb.textContent = r.price.toFixed(1); td3.appendChild(pb); tr.appendChild(td3);
+    const td2 = document.createElement('td'); td2.className = 'num-cell'; td2.textContent = r.dist.toFixed(1); trEl.appendChild(td2);
+    const td3 = document.createElement('td'); td3.className = 'num-cell'; const pb = document.createElement('b'); pb.textContent = r.price.toFixed(1); td3.appendChild(pb); trEl.appendChild(td3);
 
     const td4 = document.createElement('td'); td4.className = 'cap-cell';
     const meter = document.createElement('span'); meter.className = 'cap-meter';
@@ -1186,10 +1404,10 @@ function renderStations() {
     const diff = r.cap - r.price;
     const dspan = document.createElement('span');
     dspan.className = diff > 0.5 ? 'under-cap' : 'at-cap';
-    dspan.textContent = diff > 0.5 ? `−${diff.toFixed(1)}¢ under` : 'at cap';
+    dspan.textContent = diff > 0.5 ? tr('js.underCapTpl').replace('{diff}', diff.toFixed(1)) : tr('js.atCap');
     td4.appendChild(dspan);
-    tr.appendChild(td4);
-    stationBody.appendChild(tr);
+    trEl.appendChild(td4);
+    stationBody.appendChild(trEl);
   });
   document.querySelectorAll('#stationTable th.sortable').forEach(th => {
     th.querySelector('.dir').textContent = th.dataset.key === stationSort.key ? (stationSort.dir === 1 ? '▲' : '▼') : '';
@@ -1221,8 +1439,8 @@ function calc() {
   const maxV = Math.max(saving, BENCH);
   cmpBars.textContent = '';
   [
-    { label: 'You', v: saving, slot: '--s1' },
-    { label: 'ACCC typical', v: BENCH, slot: '--seq-250' }
+    { label: tr('js.you'), v: saving, slot: '--s1' },
+    { label: tr('js.acccTypical'), v: BENCH, slot: '--seq-250' }
   ].forEach(row => {
     const div = document.createElement('div'); div.className = 'cmp-bar';
     const bl = document.createElement('span'); bl.className = 'bl'; bl.textContent = row.label;
@@ -1237,10 +1455,10 @@ function calc() {
   });
   const ratio = saving / BENCH;
   cmpNote.textContent = ratio >= 1.15
-    ? `Your pattern is worth ${ratio.toFixed(1)}× the typical motorist's opportunity — alerts pay off fast.`
+    ? tr('js.cmpHigh').replace('{ratio}', ratio.toFixed(1))
     : ratio <= 0.85
-      ? 'Below the typical opportunity — still free money for a one-time alert setup.'
-      : 'Right on the typical Melbourne motorist’s opportunity.';
+      ? tr('js.cmpLow')
+      : tr('js.cmpMid');
 }
 [fills, tank, gap].forEach(s => s.addEventListener('input', calc));
 
@@ -1290,15 +1508,16 @@ function renderAlerts() {
   alertTableEl.textContent = '';
   const t = document.createElement('table');
   const thead = document.createElement('thead'); const hr = document.createElement('tr');
-  ['Date', 'Cheapest ¢/L', 'Station', 'Alert'].forEach(h => { const thc = document.createElement('th'); thc.textContent = h; hr.appendChild(thc); });
+  [tr('js.colDate'), tr('js.colCheapest'), tr('js.colStation2'), tr('js.colAlert')].forEach(h => { const thc = document.createElement('th'); thc.textContent = h; hr.appendChild(thc); });
   thead.appendChild(hr); t.appendChild(thead);
   const tb = document.createElement('tbody');
   for (let d = 0; d < DAYS; d++) {
-    const tr = document.createElement('tr');
-    [dayLabels[d], data[d].toFixed(1), station[d], fired.some(m => m.day === d) ? '🔔 fired' : ''].forEach(v => {
-      const td = document.createElement('td'); td.textContent = v; tr.appendChild(td);
+    const trEl = document.createElement('tr');
+    const firedLabel = fired.some(m => m.day === d) ? tr('js.fired') : '';
+    [dayLabels[d], data[d].toFixed(1), station[d], firedLabel].forEach(v => {
+      const td = document.createElement('td'); td.textContent = v; trEl.appendChild(td);
     });
-    tb.appendChild(tr);
+    tb.appendChild(trEl);
   }
   t.appendChild(tb); alertTableEl.appendChild(t);
 
@@ -1312,15 +1531,15 @@ function renderAlerts() {
   list.textContent = '';
   if (!fired.length) {
     const li = document.createElement('li'); li.className = 'notif-empty';
-    li.textContent = th <= Math.min(...data) ? 'Target below the fortnight low — no alerts. Drag the target up.' : 'No alerts fired — drag the target down toward the cycle low.';
+    li.textContent = th <= Math.min(...data) ? tr('js.notifEmpty1') : tr('js.notifEmpty2');
     list.appendChild(li);
   } else {
     [...fired].reverse().forEach(m => {
       const li = document.createElement('li');
       const bell = document.createElement('span'); bell.className = 'bell'; bell.textContent = '🔔';
       const nb = document.createElement('div'); nb.className = 'nb';
-      const b = document.createElement('b'); b.textContent = `${FUELS[fuel].short} dropped to ${m.value.toFixed(1)}¢ at ${m.station}`;
-      const sp = document.createElement('span'); sp.textContent = `${dayLabels[m.day]} · within your radius · ${(th - m.value) >= 0 ? (th - m.value).toFixed(1) : '0.0'}¢ under your target`;
+      const b = document.createElement('b'); b.textContent = tr('js.notifDroppedTpl').replace('{fuel}', FUELS[fuel].short).replace('{price}', m.value.toFixed(1)).replace('{station}', m.station);
+      const sp = document.createElement('span'); sp.textContent = tr('js.notifSubTpl').replace('{date}', dayLabels[m.day]).replace('{diff}', (th - m.value) >= 0 ? (th - m.value).toFixed(1) : '0.0');
       nb.appendChild(b); nb.appendChild(sp);
       li.appendChild(bell); li.appendChild(nb);
       list.appendChild(li);
@@ -1334,7 +1553,7 @@ alertTableBtn.addEventListener('click', () => {
   alertTableEl.hidden = showing;
   alertChartEl.style.display = showing ? '' : 'none';
   alertTableBtn.setAttribute('aria-pressed', String(!showing));
-  alertTableBtn.textContent = showing ? 'Table view' : 'Chart view';
+  alertTableBtn.textContent = showing ? tr('common.tableView') : tr('common.chartView');
 });
 
 /* ================= fuel filter (scopes explorer + calculator gap + alerts) ================= */
@@ -1353,28 +1572,25 @@ document.querySelectorAll('#fuelSeg button').forEach(btn => {
 });
 
 /* ================= state machine detail ================= */
-const STATE_INFO = {
-  submitted: '<b>Submitted.</b> A retailer lodges a new price via the mandatory real-time reporting channel. The record exists but is not yet public — it must clear validation first.',
-  validating: '<b>Validating.</b> Two checks run in parallel: format validation, and a legality check against the locked <b>DailyPriceCap</b>. A price above the cap is rejected and the breach flagged (penalties from $3,000 apply).',
-  live: '<b>Live.</b> The price is public. It alternates between <b>Active</b> (fresh) and <b>Stale</b> (ageing without re-confirmation). The moment a price becomes Active is the exact event <b>Price Drop Alerts</b> listens for — the improvement needs no new lifecycle.',
-  archived: '<b>Archived.</b> Superseded by a newer price; retained for trend analysis and audit, no longer shown to motorists.',
-  final: '<b>Destroyed.</b> Purged after the 7-year retention period — or immediately via the <b>terminate</b> marker if the station is deregistered.'
-};
 const stateDetail = document.getElementById('stateDetail');
+let currentState = 'live';
+function renderStateDetail(state) { stateDetail.innerHTML = tr('s08.detail.' + state); }
 document.querySelectorAll('.life-state').forEach(b => {
   b.addEventListener('click', () => {
     document.querySelectorAll('.life-state').forEach(x => x.classList.remove('sel'));
     b.classList.add('sel');
-    stateDetail.innerHTML = STATE_INFO[b.dataset.state];
+    currentState = b.dataset.state;
+    renderStateDetail(currentState);
   });
 });
-stateDetail.innerHTML = STATE_INFO.live;
+renderStateDetail(currentState);
 
 /* ================= lightbox ================= */
 const lightbox = document.getElementById('lightbox'), lbImg = document.getElementById('lbImg'), lbCap = document.getElementById('lbCap');
 document.querySelectorAll('.thumb').forEach(t => {
   t.addEventListener('click', () => {
-    lbImg.src = t.dataset.img; lbImg.alt = t.dataset.cap; lbCap.textContent = t.dataset.cap;
+    const capText = (t.querySelector('.cap').textContent || '').replace(/\s+/g, ' ').trim();
+    lbImg.src = t.dataset.img; lbImg.alt = capText; lbCap.textContent = capText;
     lightbox.classList.add('open');
   });
 });
@@ -1457,6 +1673,10 @@ window.addEventListener('resize', () => { clearTimeout(resizeT); resizeT = setTi
 /* init */
 let saved = null;
 try { saved = localStorage.getItem('ss-theme'); } catch (e) {}
+let savedLang = null;
+try { savedLang = localStorage.getItem('ss-lang'); } catch (e) {}
+lang = savedLang || 'en';
+applyI18n();
 setTheme(saved || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
 </script>
 </body>
